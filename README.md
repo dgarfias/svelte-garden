@@ -746,4 +746,4 @@ Responsive grid system based on flexbox.
 
 ## License
 
-Apache-2.0
+Based on [Zendesk Garden](https://github.com/zendeskgarden/react-components) which is licensed under under the [Apache License, Version 2.0](LICENSE.md)
