@@ -1593,25 +1593,31 @@ npm run dev`}
     .nav {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        padding: 16px;
+        gap: 4px;
+        padding: 12px;
         margin-bottom: 32px;
-        background-color: var(--garden-color-background-subtle, #f8f9f9);
+        background-color: var(--garden-color-background-default, #fff);
+        border: 1px solid var(--garden-color-border-default, #d8dcde);
         border-radius: 8px;
     }
 
     .nav-link {
-        padding: 8px 14px;
+        padding: 6px 12px;
         font-size: 13px;
         font-weight: 500;
-        color: var(--garden-color-foreground-primary, #1f73b7);
+        color: var(--garden-color-foreground-default, #2f3941);
         text-decoration: none;
         border-radius: 4px;
-        transition: background-color 0.15s;
+        transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
     }
 
     .nav-link:hover {
-        background-color: var(--garden-color-background-emphasis, #e9ebed);
+        background-color: var(--garden-color-primary-opacity-08, rgba(31, 115, 183, 0.08));
+        color: var(--garden-color-foreground-primary, #1f73b7);
+    }
+
+    .nav-link:active {
+        background-color: var(--garden-color-primary-opacity-16, rgba(31, 115, 183, 0.16));
     }
 
     /* Content */
