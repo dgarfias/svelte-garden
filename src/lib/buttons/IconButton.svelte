@@ -141,7 +141,7 @@
   }
 
   .garden-icon-button--primary:hover:not(:disabled) {
-    background-color: var(--_garden-primary-hover-bg, #3091ec);
+    background-color: var(--garden-color-background-primary-emphasis-hover, #3091ec);
   }
 
   /* Neutral variant */
@@ -169,8 +169,8 @@
     border-color: transparent;
   }
 
-  .garden-icon-button--basic:hover:not(:disabled) {
-    background-color: var(--_garden-basic-hover-bg, rgba(31, 115, 183, 0.08));
+  .garden-icon-button--basic:not(.garden-icon-button--primary):hover:not(:disabled) {
+    background-color: var(--garden-color-primary-opacity-08, rgba(31, 115, 183, 0.08));
   }
 
   /* Pill variant */

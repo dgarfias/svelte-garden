@@ -113,6 +113,11 @@
     box-sizing: border-box;
   }
 
+  /* Add vertical spacing between rows */
+  :global(.garden-row + .garden-row) {
+    margin-top: var(--garden-grid-gutter, 16px);
+  }
+
   /* Responsive styles using CSS variables */
   @media (max-width: 575px) {
     .garden-row {

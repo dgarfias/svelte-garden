@@ -212,6 +212,36 @@
     // Loaders
     let progressValue = $state(65);
 
+    // Tables - sorting
+    let sortColumn = $state<string | null>("name");
+    let sortDirection = $state<"asc" | "desc">("asc");
+
+    function handleSort(column: string) {
+        if (sortColumn === column) {
+            sortDirection = sortDirection === "asc" ? "desc" : "asc";
+        } else {
+            sortColumn = column;
+            sortDirection = "asc";
+        }
+    }
+
+    const sortedTableData = $derived(() => {
+        if (!sortColumn) return tableData;
+        return [...tableData].sort((a, b) => {
+            const aVal = a[sortColumn as keyof typeof a];
+            const bVal = b[sortColumn as keyof typeof b];
+            if (typeof aVal === "string" && typeof bVal === "string") {
+                return sortDirection === "asc"
+                    ? aVal.localeCompare(bVal)
+                    : bVal.localeCompare(aVal);
+            }
+            if (typeof aVal === "number" && typeof bVal === "number") {
+                return sortDirection === "asc" ? aVal - bVal : bVal - aVal;
+            }
+            return 0;
+        });
+    });
+
     // ============================================================================
     // DATA
     // ============================================================================
@@ -249,7 +279,7 @@
     // ============================================================================
 
     const icons = {
-        settings: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M13.5 8c0-.56-.06-1.1-.17-1.62l1.72-1.27a.5.5 0 00.12-.64l-1.64-2.84a.5.5 0 00-.61-.22l-2.03.82a6.05 6.05 0 00-1.4-.8L9.18.42A.5.5 0 008.68 0H5.32a.5.5 0 00-.5.42l-.31 2.01c-.51.21-.98.48-1.4.8l-2.03-.82a.5.5 0 00-.61.22L.84 5.47a.5.5 0 00.12.64l1.72 1.27A6.18 6.18 0 002.5 8c0 .56.06 1.1.17 1.62l-1.72 1.27a.5.5 0 00-.12.64l1.64 2.84a.5.5 0 00.61.22l2.03-.82c.42.32.89.59 1.4.8l.31 2.01a.5.5 0 00.5.42h3.36a.5.5 0 00.5-.42l.31-2.01c.51-.21.98-.48 1.4-.8l2.03.82a.5.5 0 00.61-.22l1.64-2.84a.5.5 0 00-.12-.64l-1.72-1.27c.11-.52.17-1.06.17-1.62zM7 10.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>`,
+        settings: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/></svg>`,
         plus: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a1 1 0 011 1v5h5a1 1 0 110 2H9v5a1 1 0 11-2 0V9H2a1 1 0 110-2h5V2a1 1 0 011-1z"/></svg>`,
         trash: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10 1H6a1 1 0 00-1 1v1H2a1 1 0 000 2h1v9a1 1 0 001 1h8a1 1 0 001-1V5h1a1 1 0 100-2h-3V2a1 1 0 00-1-1zm-4 3h4V3H6v1zm5 2H5v8h6V6z"/></svg>`,
         chevronDown: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8.5l-4-4h8l-4 4z"/></svg>`,
@@ -925,7 +955,7 @@ npm run dev`}
                                 (progressValue = Math.max(
                                     0,
                                     progressValue - 10,
-                                ))}>-10%</Button
+                                ))}>-</Button
                         >
                         <span>{progressValue}%</span>
                         <Button
@@ -934,7 +964,7 @@ npm run dev`}
                                 (progressValue = Math.min(
                                     100,
                                     progressValue + 10,
-                                ))}>+10%</Button
+                                ))}>+</Button
                         >
                     </div>
                 </div>
@@ -1028,7 +1058,9 @@ npm run dev`}
                 <h3 class="demo-title">Menu</h3>
                 <div class="dropdown-container">
                     <Button onclick={() => (showMenu = !showMenu)}>
-                        Actions {@html icons.chevronDown}
+                        Actions <span style="margin-left: 4px"
+                            >{@html icons.chevronDown}</span
+                        >
                     </Button>
                     <Menu
                         isExpanded={showMenu}
@@ -1214,6 +1246,7 @@ npm run dev`}
             <h2 class="section-title">Tables</h2>
 
             <div class="demo-block">
+                <h3 class="demo-title">Basic Table</h3>
                 <Table>
                     <Caption>User Directory</Caption>
                     <TableHead>
@@ -1235,6 +1268,62 @@ npm run dev`}
                         {/each}
                     </TableBody>
                 </Table>
+            </div>
+
+            <div class="demo-block">
+                <h3 class="demo-title">Sortable Table</h3>
+                <Table>
+                    <Caption>User Directory</Caption>
+                    <TableHead>
+                        <TableRow>
+                            <TableHeaderCell
+                                isSortable
+                                sortDirection={sortColumn === "id"
+                                    ? sortDirection
+                                    : null}
+                                onclick={() => handleSort("id")}
+                                >ID</TableHeaderCell
+                            >
+                            <TableHeaderCell
+                                isSortable
+                                sortDirection={sortColumn === "name"
+                                    ? sortDirection
+                                    : null}
+                                onclick={() => handleSort("name")}
+                                >Name</TableHeaderCell
+                            >
+                            <TableHeaderCell
+                                isSortable
+                                sortDirection={sortColumn === "email"
+                                    ? sortDirection
+                                    : null}
+                                onclick={() => handleSort("email")}
+                                >Email</TableHeaderCell
+                            >
+                            <TableHeaderCell
+                                isSortable
+                                sortDirection={sortColumn === "role"
+                                    ? sortDirection
+                                    : null}
+                                onclick={() => handleSort("role")}
+                                >Role</TableHeaderCell
+                            >
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {#each sortedTableData() as row}
+                            <TableRow>
+                                <TableCell>{row.id}</TableCell>
+                                <TableCell>{row.name}</TableCell>
+                                <TableCell>{row.email}</TableCell>
+                                <TableCell>{row.role}</TableCell>
+                            </TableRow>
+                        {/each}
+                    </TableBody>
+                </Table>
+                <p class="state-label">
+                    Sorted by: {sortColumn} ({sortDirection})
+                </p>
             </div>
         </section>
 
