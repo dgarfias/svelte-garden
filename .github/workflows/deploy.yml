@@ -3,10 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ['main']
-  # Only allow manual workflow dispatch from repo maintainers
   workflow_dispatch:
 
-# Prevent fork PRs from running workflows (security)
 permissions:
   contents: read
   pages: write
@@ -28,15 +26,12 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: svelte-components/package-lock.json
 
       - name: Install dependencies
         run: npm ci
-        working-directory: svelte-components
 
       - name: Build static site
         run: npm run build:site
-        working-directory: svelte-components
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -44,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: svelte-components/build
+          path: build
 
   deploy:
     environment:
