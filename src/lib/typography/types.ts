@@ -45,15 +45,34 @@ export interface CodeProps extends HTMLAttributes<HTMLElement> {
   hue?: string;
 }
 
+/** Supported languages for syntax highlighting (matches prism-react-renderer) */
+export const CODEBLOCK_LANGUAGES = [
+  'bash',
+  'css',
+  'diff',
+  'graphql',
+  'javascript',
+  'json',
+  'jsx',
+  'markdown',
+  'markup',
+  'python',
+  'typescript',
+  'tsx',
+  'yaml'
+] as const;
+
+export type CodeBlockLanguage = (typeof CODEBLOCK_LANGUAGES)[number];
+
 export interface CodeBlockProps extends HTMLAttributes<HTMLPreElement> {
+  /** Programming language for syntax highlighting */
+  language?: CodeBlockLanguage;
   /** Visual size */
   size?: 'small' | 'medium' | 'large';
   /** Whether line numbers are shown */
   isNumbered?: boolean;
-  /** Whether to highlight a line */
+  /** Lines to highlight (1-indexed) */
   highlightLines?: number[];
-  /** Whether it's light mode */
-  isLight?: boolean;
 }
 
 export interface BlockquoteProps extends HTMLAttributes<HTMLQuoteElement> {

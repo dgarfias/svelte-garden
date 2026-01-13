@@ -19,6 +19,9 @@ export type {
   SpanProps,
   CodeProps,
   CodeBlockProps,
+  CodeBlockLanguage,
   BlockquoteProps,
   ListProps
 } from './types';
+
+export { CODEBLOCK_LANGUAGES } from './types';
