@@ -6,6 +6,7 @@
   import type { Snippet } from 'svelte';
   import { getMenuContext } from './context';
   import { useRtl } from '../theming';
+  import { CheckSmStroke, PlusStroke, ChevronRightStroke } from '../icons';
 
   interface Props extends MenuItemProps {
     children?: Snippet;
@@ -63,13 +64,9 @@
   {#if type === 'default' || type === 'danger' || type === 'add'}
     <span class="garden-menu-item__icon">
       {#if isSelected}
-        <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-          <path fill="currentColor" d="M4.5 9.5L1 6l1.5-1.5L4.5 6.5l5-5L11 3z" />
-        </svg>
+        <CheckSmStroke size={12} />
       {:else if type === 'add'}
-        <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-          <path fill="currentColor" d="M6 1a1 1 0 011 1v3h3a1 1 0 110 2H7v3a1 1 0 11-2 0V7H2a1 1 0 110-2h3V2a1 1 0 011-1z"/>
-        </svg>
+        <PlusStroke size={12} />
       {/if}
     </span>
   {/if}
@@ -79,9 +76,7 @@
     {/if}
   </span>
   {#if type === 'next'}
-    <svg class="garden-menu-item__chevron" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-      <path fill="currentColor" d="M4.5 1.5l5 4.5-5 4.5z"/>
-    </svg>
+    <ChevronRightStroke class="garden-menu-item__chevron" size={12} />
   {/if}
 </li>
 
@@ -118,14 +113,19 @@
   .garden-menu-item__icon {
     position: absolute;
     left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 16px;
     height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--garden-color-foreground-primary, #1f73b7);
   }
 
-  .garden-menu-item__icon svg {
-    width: 100%;
-    height: 100%;
+  .garden-menu-item__icon :global(svg) {
+    width: 12px;
+    height: 12px;
   }
 
   .garden-menu-item__content {

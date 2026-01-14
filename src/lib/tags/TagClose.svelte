@@ -11,6 +11,7 @@
 -->
 <script lang="ts">
   import type { TagCloseProps } from './types';
+  import { XStroke } from '../icons';
 
   let {
     class: className = '',
@@ -31,9 +32,7 @@
   data-garden-id="tags.close"
   {...restProps}
 >
-  <svg viewBox="0 0 12 12" aria-hidden="true">
-    <path fill="currentColor" d="M6.707 6l2.646 2.646a.5.5 0 01-.707.708L6 6.707l-2.646 2.647a.5.5 0 11-.708-.708L5.293 6 2.646 3.354a.5.5 0 11.708-.708L6 5.293l2.646-2.647a.5.5 0 11.708.708L6.707 6z"/>
-  </svg>
+  <XStroke size={12} />
 </button>
 
 <style>

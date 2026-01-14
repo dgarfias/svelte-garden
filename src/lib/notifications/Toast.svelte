@@ -11,6 +11,7 @@
   import type { ToastProps } from './types';
   import type { Snippet } from 'svelte';
   import { useRtl } from '../theming';
+  import { InfoStroke, CheckCircleStroke, AlertWarningStroke, XCircleStroke, XStroke } from '../icons';
 
   interface Props extends ToastProps {
     children?: Snippet;
@@ -50,14 +51,6 @@
     isRtl && 'garden-toast--rtl',
     className
   ].filter(Boolean).join(' '));
-
-  // SVG icons matching @zendeskgarden/svg-icons stroke style (16px)
-  const icons: Record<string, string> = {
-    info: '<circle cx="8" cy="8" r="6.5" stroke="currentColor" fill="none" stroke-width="1"/><path d="M8 11V8M8 5.5v-.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>',
-    success: '<circle cx="8" cy="8" r="6.5" stroke="currentColor" fill="none" stroke-width="1"/><path d="M5.5 8l2 2 3-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
-    warning: '<path d="M8 3L2 13h12L8 3z" stroke="currentColor" fill="none" stroke-width="1" stroke-linejoin="round"/><path d="M8 10V7M8 11.5v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>',
-    error: '<circle cx="8" cy="8" r="6.5" stroke="currentColor" fill="none" stroke-width="1"/><path d="M6 6l4 4M10 6l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>'
-  };
 </script>
 
 {#if isVisible}
@@ -68,9 +61,17 @@
     {...restProps}
   >
     <!-- Type icon -->
-    <svg class="garden-toast__icon" viewBox="0 0 16 16" aria-hidden="true">
-      {@html icons[type]}
-    </svg>
+    <span class="garden-toast__icon">
+      {#if type === 'info'}
+        <InfoStroke />
+      {:else if type === 'success'}
+        <CheckCircleStroke />
+      {:else if type === 'warning'}
+        <AlertWarningStroke />
+      {:else if type === 'error'}
+        <XCircleStroke />
+      {/if}
+    </span>
     
     <!-- Content area -->
     <div class="garden-toast__content">
@@ -90,9 +91,7 @@
         aria-label="Dismiss"
         onclick={handleDismiss}
       >
-        <svg viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        </svg>
+        <XStroke />
       </button>
     {/if}
   </div>
@@ -125,7 +124,13 @@
   .garden-toast__icon {
     position: absolute;
     left: 16px;
-    top: 22px;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    height: 20px; /* Match line-height of text */
+  }
+
+  .garden-toast__icon :global(svg) {
     width: 16px;
     height: 16px;
   }
@@ -211,7 +216,7 @@
     box-shadow: inset 0 0 0 3px var(--garden-color-border-primary-emphasis, #1f73b7);
   }
 
-  .garden-toast__close svg {
+  .garden-toast__close :global(svg) {
     width: 16px;
     height: 16px;
   }

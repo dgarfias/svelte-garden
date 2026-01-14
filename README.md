@@ -7,19 +7,23 @@ A Svelte 5 implementation of the Zendesk Garden design system.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Theming](#theming)
-- [Components](#components)
-  - [Buttons](#buttons)
-  - [Forms](#forms)
-  - [Typography](#typography)
-  - [Layout](#layout)
-  - [Navigation](#navigation)
-  - [Data Display](#data-display)
-  - [Feedback](#feedback)
-  - [Overlays](#overlays)
-  - [Utilities](#utilities)
+- [Svelte Garden Component API](#svelte-garden-component-api)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Quick Start](#quick-start)
+  - [Theming](#theming)
+  - [Components](#components)
+    - [Buttons](#buttons)
+    - [Forms](#forms)
+    - [Typography](#typography)
+    - [Layout](#layout)
+    - [Navigation](#navigation)
+    - [Data Display](#data-display)
+    - [Feedback](#feedback)
+    - [Overlays](#overlays)
+    - [Utilities](#utilities)
+    - [Icons](#icons)
+    - [CKEditor](#ckeditor)
 
 ---
 
@@ -737,6 +741,286 @@ Responsive grid system based on flexbox.
 
 ---
 
+### Icons
+
+SVG icons ported from [@zendeskgarden/svg-icons](https://zendeskgarden.github.io/svg-icons). All icons use `currentColor` for fills/strokes to inherit text color.
+
+#### Basic Usage
+
+Icons are imported as individual Svelte components (Lucide-style):
+
+```svelte
+<script>
+  import { GearStroke, StarFill, ChevronDownStroke } from 'svelte-garden/icons';
+</script>
+
+<GearStroke />
+<GearStroke size={24} />
+<StarFill aria-label="Favorite" />
+```
+
+#### Icon Component Props
+
+All icon components accept the same props:
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `number` | `16` | Icon size in pixels |
+| `class` | `string` | - | Additional CSS classes |
+| `...rest` | `HTMLAttributes` | - | Any valid SVG attributes |
+
+#### Available Icons
+
+The library includes 458 icons from Zendesk Garden's SVG icon set. Icons follow a naming convention:
+
+- **Stroke icons**: Outlined style (e.g., `GearStroke`, `StarStroke`)
+- **Fill icons**: Solid style (e.g., `GearFill`, `StarFill`)
+
+**Common Icons:**
+
+| Category | Icons |
+|----------|-------|
+| **Navigation** | `ChevronDownStroke`, `ChevronUpStroke`, `ChevronLeftStroke`, `ChevronRightStroke`, `ArrowLeftStroke`, `ArrowRightStroke` |
+| **Actions** | `PlusStroke`, `XStroke`, `CheckLgStroke`, `CheckSmStroke`, `SearchStroke`, `TrashStroke` |
+| **Text Formatting** | `BoldStroke`, `ItalicStroke`, `UnderlineStroke`, `LinkStroke`, `ListBulletStroke`, `ListNumberStroke` |
+| **Alerts** | `AlertInfoStroke`, `AlertWarningStroke`, `AlertErrorStroke`, `CheckCircleStroke` |
+| **Files** | `FileGenericFill`, `FileDocumentFill`, `FileImageFill`, `FilePdfFill`, `FileSpreadsheetFill` |
+| **Media** | `ImageStroke`, `CopyStroke`, `DownloadStroke`, `UploadStroke` |
+| **User** | `UserSoloStroke`, `UserGroupStroke`, `EmailStroke`, `PhoneStroke` |
+| **Time** | `CalendarStroke`, `ClockStroke` |
+| **Settings** | `GearStroke`, `MenuStroke`, `OverflowStroke`, `OverflowVerticalStroke` |
+| **Theme** | `SunStroke`, `MoonStroke` |
+
+#### Sizes
+
+Icons default to 16px but can be any size:
+
+```svelte
+<GearStroke size={12} />  <!-- 12px -->
+<GearStroke size={16} />  <!-- 16px (default) -->
+<GearStroke size={24} />  <!-- 24px -->
+<GearStroke size={32} />  <!-- 32px -->
+```
+
+#### Colors
+
+Icons inherit their color from CSS `color` property:
+
+```svelte
+<span style="color: #1f73b7">
+  <StarFill />  <!-- Blue star -->
+</span>
+
+<span style="color: var(--garden-color-foreground-danger)">
+  <AlertErrorStroke />  <!-- Red alert -->
+</span>
+```
+
+#### Using with Buttons
+
+Icons integrate seamlessly with buttons:
+
+```svelte
+<script>
+  import { Button } from 'svelte-garden/buttons';
+  import { PlusStroke, ChevronDownStroke } from 'svelte-garden/icons';
+</script>
+
+<!-- Icon before text -->
+<Button isPrimary>
+  <PlusStroke size={16} style="margin-right: 8px;" />
+  Add Item
+</Button>
+
+<!-- Icon after text -->
+<Button>
+  Actions
+  <ChevronDownStroke size={16} style="margin-left: 4px;" />
+</Button>
+```
+
+#### Iterating All Icons
+
+For building icon galleries or pickers, use the `Icons` object:
+
+```svelte
+<script>
+  import { Icons } from 'svelte-garden/icons';
+  
+  // Icons is an object mapping icon names to components
+  // e.g., { GearStroke: [Component], StarFill: [Component], ... }
+</script>
+
+{#each Object.entries(Icons) as [name, IconComponent]}
+  <div>
+    <IconComponent size={16} />
+    <span>{name}</span>
+  </div>
+{/each}
+```
+
+---
+
+### CKEditor
+
+A rich text editor integration styled with Zendesk Garden design system. Automatically detects and responds to dark mode from the ThemeProvider.
+
+#### Installation
+
+CKEditor requires the `ckeditor5` package:
+
+```bash
+npm install ckeditor5
+```
+
+#### Vite Configuration (Garden Icons)
+
+To use Zendesk Garden icons in CKEditor instead of the default CKEditor icons, add an alias to your `vite.config.ts`:
+
+```ts
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [sveltekit()],
+  resolve: {
+    alias: {
+      // Replace CKEditor icons with Garden icons
+      '@ckeditor/ckeditor5-icons/dist/index.js': new URL(
+        './src/lib/ckeditor/icons.js',
+        import.meta.url
+      ).pathname
+    }
+  }
+});
+```
+
+This alias redirects CKEditor's icon imports to a custom `icons.js` file that:
+1. Replaces common toolbar icons (bold, italic, link, lists, etc.) with Zendesk Garden equivalents
+2. Re-exports all other CKEditor icons unchanged
+
+The custom icons file (`src/lib/ckeditor/icons.js`) imports Garden SVGs from the shared `src/lib/icons/svg/` folder, ensuring visual consistency between the editor toolbar and the rest of your application.
+
+**Icons replaced with Garden equivalents:**
+- Bold, Italic, Underline, Code
+- Link, Unlink, Pencil
+- Bulleted List, Numbered List
+- Indent, Outdent
+- Block Quote, Code Block
+- Horizontal Line
+- Check, Cancel
+- Dropdown Arrow
+
+#### Basic Usage
+
+```svelte
+<script>
+  import { ThemeProvider } from 'svelte-garden/theming';
+  import { GardenEditor } from 'svelte-garden/ckeditor';
+  
+  let content = '<p>Hello, World!</p>';
+  
+  function handleChange(data) {
+    content = data;
+  }
+</script>
+
+<ThemeProvider colorScheme="dark">
+  <!-- Editor automatically uses dark mode -->
+  <GardenEditor 
+    value={content}
+    onchange={handleChange}
+    placeholder="Start typing..."
+  />
+</ThemeProvider>
+```
+
+#### GardenEditor Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `''` | HTML content (controlled) |
+| `config` | `object` | - | CKEditor configuration override |
+| `disabled` | `boolean` | `false` | Read-only mode |
+| `placeholder` | `string` | `'Type your content here...'` | Placeholder text |
+| `minHeight` | `string` | `'200px'` | Minimum editor height |
+| `class` | `string` | `''` | Additional CSS classes |
+
+#### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `onchange` | `(data: string) => void` | Content changed |
+| `onready` | `(editor: Editor) => void` | Editor initialized |
+| `onfocus` | `(editor: Editor) => void` | Editor focused |
+| `onblur` | `(editor: Editor) => void` | Editor blurred |
+| `onerror` | `(error: Error) => void` | Initialization error |
+
+#### Default Toolbar
+
+The editor includes a toolbar matching Zendesk Garden's CKEditor:
+
+- **Heading** dropdown (Paragraph, Heading 1-3)
+- **Bold**, **Italic**, **Underline**, **Code** (inline)
+- **Bulleted List**, **Numbered List**, **Outdent**, **Indent**
+- **Block Quote**, **Code Block**, **Link**, **Horizontal Line**
+
+#### Custom Configuration
+
+Override the default plugins and toolbar:
+
+```svelte
+<script>
+  import { GardenEditor } from 'svelte-garden/ckeditor';
+  
+  // Custom config with only basic formatting
+  const customConfig = {
+    toolbar: {
+      items: ['bold', 'italic', '|', 'link']
+    }
+  };
+</script>
+
+<GardenEditor config={customConfig} />
+```
+
+#### Dark Mode
+
+The editor automatically detects the theme from the ThemeProvider. When `colorScheme="dark"` is set on the ThemeProvider, the editor switches to dark mode styling - no additional configuration needed.
+
+```svelte
+<ThemeProvider colorScheme="dark">
+  <GardenEditor /> <!-- Automatically dark -->
+</ThemeProvider>
+```
+
+#### Accessing the Editor Instance
+
+```svelte
+<script>
+  let editorInstance;
+  
+  function handleReady(editor) {
+    editorInstance = editor;
+    console.log('Editor ready:', editor);
+  }
+  
+  function insertText() {
+    if (editorInstance) {
+      editorInstance.model.change(writer => {
+        const insertPosition = editorInstance.model.document.selection.getFirstPosition();
+        writer.insertText('Hello!', insertPosition);
+      });
+    }
+  }
+</script>
+
+<GardenEditor onready={handleReady} />
+<Button onclick={insertText}>Insert Text</Button>
+```
+
+---
+
 ## Browser Support
 
 - Chrome (latest)
@@ -746,4 +1030,4 @@ Responsive grid system based on flexbox.
 
 ## License
 
-Based on [Zendesk Garden](https://github.com/zendeskgarden/react-components) which is licensed under under the [Apache License, Version 2.0](LICENSE.md)
+Based on [Zendesk Garden](https://github.com/zendeskgarden/react-components) which is licensed under the [Apache License, Version 2.0](LICENSE.md)

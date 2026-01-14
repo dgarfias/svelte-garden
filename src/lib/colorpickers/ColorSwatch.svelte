@@ -6,6 +6,7 @@
 <script lang="ts">
   import type { ColorSwatchProps, ILabeledColor } from './types';
   import type { Snippet } from 'svelte';
+  import { CheckSmFill } from '../icons';
 
   interface Props extends ColorSwatchProps {
     children?: Snippet;
@@ -91,9 +92,7 @@
             />
             <span class="garden-color-swatch__swatch">
               {#if selected}
-                <svg class="garden-color-swatch__check" viewBox="0 0 12 12" fill="currentColor">
-                  <path d="M4.5 9.5L1.5 6.5L2.5 5.5L4.5 7.5L9.5 2.5L10.5 3.5L4.5 9.5Z"/>
-                </svg>
+                <CheckSmFill class="garden-color-swatch__check" size={12} />
               {/if}
             </span>
           </label>
@@ -162,9 +161,7 @@
     box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1f73b7;
   }
 
-  .garden-color-swatch__check {
-    width: 12px;
-    height: 12px;
+  :global(.garden-color-swatch__check) {
     /* Use contrasting color based on background */
     color: #fff;
     filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));

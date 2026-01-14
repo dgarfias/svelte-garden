@@ -135,6 +135,9 @@
         Dropzone,
     } from "$lib/draggable";
 
+    // -- CKEDITOR --
+    import { GardenEditor } from "$lib/ckeditor";
+
     // ============================================================================
     // STATE
     // ============================================================================
@@ -160,6 +163,8 @@
         { id: "colorpickers", label: "Color Pickers" },
         { id: "datepickers", label: "Date Pickers" },
         { id: "draggable", label: "Draggable" },
+        { id: "ckeditor", label: "CKEditor" },
+        { id: "icons", label: "Icons" },
     ];
 
     // Buttons
@@ -211,6 +216,9 @@
 
     // Loaders
     let progressValue = $state(65);
+
+    // CKEditor
+    let editorContent = $state('<h2>Welcome to Svelte Garden Editor</h2><p>This is a <strong>CKEditor 5</strong> integration styled with the <a href="https://garden.zendesk.com">Zendesk Garden</a> design system.</p><p>Try out the formatting options:</p><ul><li>Bold, italic, underline text</li><li>Headings and paragraphs</li><li>Bulleted and numbered lists</li><li>Links and blockquotes</li></ul><blockquote><p>This is a blockquote example with Garden styling.</p></blockquote>');
 
     // Tables - sorting
     let sortColumn = $state<string | null>("name");
@@ -275,22 +283,42 @@
     ];
 
     // ============================================================================
-    // ICONS (inline SVGs)
+    // ICONS (Garden SVG Icons)
     // ============================================================================
 
-    const icons = {
-        settings: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/></svg>`,
-        plus: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a1 1 0 011 1v5h5a1 1 0 110 2H9v5a1 1 0 11-2 0V9H2a1 1 0 110-2h5V2a1 1 0 011-1z"/></svg>`,
-        trash: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10 1H6a1 1 0 00-1 1v1H2a1 1 0 000 2h1v9a1 1 0 001 1h8a1 1 0 001-1V5h1a1 1 0 100-2h-3V2a1 1 0 00-1-1zm-4 3h4V3H6v1zm5 2H5v8h6V6z"/></svg>`,
-        chevronDown: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8.5l-4-4h8l-4 4z"/></svg>`,
-        star: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l2.47 5.01L16 5.82l-4 3.9.94 5.5L8 12.77l-4.94 2.45.94-5.5-4-3.9 5.53-.81L8 0z"/></svg>`,
-        search: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 10-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 001.415-1.414l-3.85-3.85a1.007 1.007 0 00-.115-.1zM12 6.5a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"/></svg>`,
-        user: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 8a4 4 0 100-8 4 4 0 000 8zm0 1c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`,
-        mail: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 3v10h16V3H0zm1.4 1h13.2L8 8.5 1.4 4zM1 12V5.1l7 4.5 7-4.5V12H1z"/></svg>`,
-        phone: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3.654 1.328a.678.678 0 00-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 004.168 6.608 17.569 17.569 0 006.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 00-.063-1.015l-2.307-1.794a.678.678 0 00-.58-.122l-2.19.547a1.745 1.745 0 01-1.657-.459L5.482 8.062a1.745 1.745 0 01-.459-1.657l.547-2.19a.678.678 0 00-.122-.58L3.654 1.328z"/></svg>`,
-        document: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M9 0H3a1 1 0 00-1 1v14a1 1 0 001 1h10a1 1 0 001-1V5l-5-5zm3 14H4V2h4v4h4v8z"/></svg>`,
-        image: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM3 13l2.5-4 1.75 2.5 2.5-4L13 13H3zM11 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>`,
-    };
+    import {
+        Icons,
+        GearStroke,
+        PlusStroke,
+        TrashStroke,
+        ChevronDownStroke,
+        StarFill,
+        SearchStroke,
+        UserSoloStroke,
+        EmailStroke,
+        PhoneStroke,
+        DashStroke,
+        ChevronDownFill
+
+    } from "$lib/icons";
+
+    // Load all icons for the gallery
+    import { onMount } from "svelte";
+    import type { Component } from "svelte";
+
+    let loadedIcons: Record<string, Component> = $state({});
+
+    onMount(async () => {
+        // Load all icon components asynchronously
+        const entries = await Promise.all(
+            Object.entries(Icons).map(async ([name, loader]) => {
+                const module = await loader();
+                return [name, module.default] as const;
+            })
+        );
+        loadedIcons = Object.fromEntries(entries);
+    });
+
 </script>
 
 <div class="showcase">
@@ -357,19 +385,19 @@
                 <h3 class="demo-title">Icon Buttons</h3>
                 <div class="demo-row">
                     <IconButton aria-label="Settings"
-                        >{@html icons.settings}</IconButton
+                        ><GearStroke /></IconButton
                     >
                     <IconButton isPrimary aria-label="Add"
-                        >{@html icons.plus}</IconButton
+                        ><PlusStroke /></IconButton
                     >
                     <IconButton isDanger aria-label="Delete"
-                        >{@html icons.trash}</IconButton
+                        ><TrashStroke /></IconButton
                     >
                     <IconButton isBasic aria-label="Star"
-                        >{@html icons.star}</IconButton
+                        ><StarFill /></IconButton
                     >
                     <IconButton isPill aria-label="Search"
-                        >{@html icons.search}</IconButton
+                        ><SearchStroke /></IconButton
                     >
                 </div>
             </div>
@@ -389,7 +417,7 @@
                             (isIconTogglePressed = !isIconTogglePressed)}
                         aria-label="Favorite"
                     >
-                        {@html icons.star}
+                        <StarFill />
                     </ToggleIconButton>
                     <span class="state-label"
                         >Toggle: {isTogglePressed}, Icon: {isIconTogglePressed}</span
@@ -403,7 +431,7 @@
                     <SplitButton>
                         <Button isPrimary>Save</Button>
                         <IconButton isPrimary aria-label="More options"
-                            >{@html icons.chevronDown}</IconButton
+                            ><ChevronDownFill size={12} /></IconButton
                         >
                     </SplitButton>
                 </div>
@@ -485,13 +513,13 @@
                     <Field>
                         <Label>Search</Label>
                         <MediaInput placeholder="Search...">
-                            {#snippet start()}{@html icons.search}{/snippet}
+                            {#snippet start()}<SearchStroke />{/snippet}
                         </MediaInput>
                     </Field>
                     <Field>
                         <Label>Email</Label>
                         <MediaInput placeholder="Enter email">
-                            {#snippet start()}{@html icons.mail}{/snippet}
+                            {#snippet start()}<EmailStroke />{/snippet}
                         </MediaInput>
                     </Field>
                 </div>
@@ -664,17 +692,17 @@
                 <h3 class="demo-title">Tiles</h3>
                 <Tiles name="demo-tiles" bind:value={tileValue}>
                     <Tile value="tile1">
-                        <TileIcon>{@html icons.mail}</TileIcon>
+                        <TileIcon><EmailStroke /></TileIcon>
                         <TileLabel>Email</TileLabel>
                         <TileDescription>Send via email</TileDescription>
                     </Tile>
                     <Tile value="tile2">
-                        <TileIcon>{@html icons.phone}</TileIcon>
+                        <TileIcon><PhoneStroke /></TileIcon>
                         <TileLabel>Phone</TileLabel>
                         <TileDescription>Call directly</TileDescription>
                     </Tile>
                     <Tile value="tile3">
-                        <TileIcon>{@html icons.user}</TileIcon>
+                        <TileIcon><UserSoloStroke /></TileIcon>
                         <TileLabel>In Person</TileLabel>
                         <TileDescription>Meet face to face</TileDescription>
                     </Tile>
@@ -955,7 +983,7 @@ npm run dev`}
                                 (progressValue = Math.max(
                                     0,
                                     progressValue - 10,
-                                ))}>-</Button
+                                ))}><DashStroke /></Button
                         >
                         <span>{progressValue}%</span>
                         <Button
@@ -964,7 +992,7 @@ npm run dev`}
                                 (progressValue = Math.min(
                                     100,
                                     progressValue + 10,
-                                ))}>+</Button
+                                ))}><PlusStroke /></Button
                         >
                     </div>
                 </div>
@@ -1058,9 +1086,7 @@ npm run dev`}
                 <h3 class="demo-title">Menu</h3>
                 <div class="dropdown-container">
                     <Button onclick={() => (showMenu = !showMenu)}>
-                        Actions <span style="margin-left: 4px"
-                            >{@html icons.chevronDown}</span
-                        >
+                        Actions <ChevronDownStroke size={16} style="margin-left: 4px; vertical-align: middle;" />
                     </Button>
                     <Menu
                         isExpanded={showMenu}
@@ -1532,7 +1558,7 @@ npm run dev`}
                 <h3 class="demo-title">Dropzone</h3>
                 <div class="demo-row-top">
                     <Dropzone isVertical>
-                        {@html icons.plus}
+                        <PlusStroke />
                         <span>Drop here</span>
                     </Dropzone>
                     <Dropzone isActive isVertical>
@@ -1541,6 +1567,101 @@ npm run dev`}
                     <Dropzone isDanger isVertical>
                         <span>Danger</span>
                     </Dropzone>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- CKEDITOR -->
+        <!-- ================================================================== -->
+        <section id="ckeditor" class="section">
+            <h2 class="section-title">CKEditor</h2>
+
+            <div class="demo-block">
+                <h3 class="demo-title">Rich Text Editor</h3>
+                <p class="demo-description">
+                    A CKEditor 5 integration styled with Garden design system.
+                    Includes toolbar with common formatting options.
+                </p>
+                <GardenEditor
+                    value={editorContent}
+                    onchange={(data) => (editorContent = data)}
+                    placeholder="Start typing your content..."
+                    minHeight="250px"
+                />
+            </div>
+
+            <div class="demo-block">
+                <h3 class="demo-title">Output Preview</h3>
+                <div class="editor-output">
+                    {@html editorContent}
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- ICONS -->
+        <!-- ================================================================== -->
+        <section id="icons" class="section">
+            <h2 class="section-title">Icons</h2>
+
+            <div class="demo-block">
+                <p class="demo-description">
+                    SVG icons ported from <Anchor href="https://zendeskgarden.github.io/svg-icons" isExternal>@zendeskgarden/svg-icons</Anchor>.
+                    All icons use <Code>currentColor</Code> for fill/stroke to inherit text color.
+                </p>
+                <div class="icons-grid">
+                    {#each Object.entries(loadedIcons) as [name, IconComponent]}
+                        <div class="icon-item">
+                            <div class="icon-preview">
+                                <IconComponent size={16} />
+                            </div>
+                            <span class="icon-name">{name}</span>
+                        </div>
+                    {/each}
+                </div>
+            </div>
+
+            <div class="demo-block">
+                <h3 class="demo-title">Sizes</h3>
+                <div class="demo-row">
+                    <div class="icon-size-demo">
+                        <GearStroke size={12} />
+                        <span>12px</span>
+                    </div>
+                    <div class="icon-size-demo">
+                        <GearStroke size={16} />
+                        <span>16px</span>
+                    </div>
+                    <div class="icon-size-demo">
+                        <GearStroke size={24} />
+                        <span>24px</span>
+                    </div>
+                    <div class="icon-size-demo">
+                        <GearStroke size={32} />
+                        <span>32px</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-block">
+                <h3 class="demo-title">Colors (via CSS color)</h3>
+                <div class="demo-row">
+                    <span style="color: var(--garden-color-foreground-default, #2f3941)">
+                        <StarFill size={24} />
+                    </span>
+                    <span style="color: var(--garden-color-foreground-primary, #1f73b7)">
+                        <StarFill size={24} />
+                    </span>
+                    <span style="color: var(--garden-color-foreground-success, #228f67)">
+                        <StarFill size={24} />
+                    </span>
+                    <span style="color: var(--garden-color-foreground-warning, #c38f00)">
+                        <StarFill size={24} />
+                    </span>
+                    <span style="color: var(--garden-color-foreground-danger, #cc3340)">
+                        <StarFill size={24} />
+                    </span>
                 </div>
             </div>
         </section>
@@ -1593,31 +1714,31 @@ npm run dev`}
     .nav {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px;
-        padding: 12px;
+        gap: 8px;
+        padding: 16px;
         margin-bottom: 32px;
-        background-color: var(--garden-color-background-default, #fff);
-        border: 1px solid var(--garden-color-border-default, #d8dcde);
+        background-color: var(--garden-color-background-subtle, #f8f9f9);
         border-radius: 8px;
     }
 
     .nav-link {
-        padding: 6px 12px;
+        padding: 8px 14px;
         font-size: 13px;
         font-weight: 500;
-        color: var(--garden-color-foreground-default, #2f3941);
+        color: var(--garden-color-foreground-primary, #1f73b7);
         text-decoration: none;
         border-radius: 4px;
-        transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+        transition: background-color 0.15s;
     }
 
     .nav-link:hover {
-        background-color: var(--garden-color-primary-opacity-08, rgba(31, 115, 183, 0.08));
-        color: var(--garden-color-foreground-primary, #1f73b7);
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .nav-link:active {
-        background-color: var(--garden-color-primary-opacity-16, rgba(31, 115, 183, 0.16));
+    :global([data-garden-color-scheme="dark"]) .nav-link:hover {
+        background-color: var(--garden-color-background-raised-emphasis, #3a3a3a);
+        box-shadow: none;
     }
 
     /* Content */
@@ -1763,5 +1884,113 @@ npm run dev`}
         display: flex;
         flex-direction: column;
         gap: 16px;
+    }
+
+    /* CKEditor demo styles */
+    .demo-description {
+        font-size: 14px;
+        color: var(--garden-color-foreground-subtle, #68737d);
+        margin: 0 0 16px;
+        line-height: 1.5;
+    }
+
+    .editor-output {
+        padding: 16px;
+        border: 1px solid var(--garden-color-border-default, #d8dcde);
+        border-radius: 4px;
+        background-color: var(--garden-color-background-subtle, #f8f9f9);
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--garden-color-foreground-default, #2f3941);
+    }
+
+    .editor-output :global(p) {
+        margin: 0 0 12px;
+    }
+
+    .editor-output :global(p:last-child) {
+        margin-bottom: 0;
+    }
+
+    .editor-output :global(h1),
+    .editor-output :global(h2),
+    .editor-output :global(h3) {
+        margin: 16px 0 8px;
+    }
+
+    .editor-output :global(h1:first-child),
+    .editor-output :global(h2:first-child),
+    .editor-output :global(h3:first-child) {
+        margin-top: 0;
+    }
+
+    .editor-output :global(ul),
+    .editor-output :global(ol) {
+        margin: 12px 0;
+        padding-left: 24px;
+    }
+
+    .editor-output :global(blockquote) {
+        margin: 12px 0;
+        padding-left: 16px;
+        border-left: 4px solid var(--garden-color-border-default, #d8dcde);
+        color: var(--garden-color-foreground-subtle, #68737d);
+        font-style: italic;
+    }
+
+    /* Icons section styles */
+    .icons-grid {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 8px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 4px;
+        border: 1px solid var(--garden-color-border-default, #d8dcde);
+        border-radius: 4px;
+    }
+
+    .icon-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 12px 8px;
+        border-radius: 4px;
+        background-color: var(--garden-color-background-subtle, #f8f9f9);
+    }
+
+    .icon-preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        margin-bottom: 8px;
+        color: var(--garden-color-foreground-default, #2f3941);
+    }
+
+    .icon-name {
+        font-size: 10px;
+        font-family: monospace;
+        color: var(--garden-color-foreground-subtle, #68737d);
+        text-align: center;
+        word-break: break-all;
+        line-height: 1.3;
+    }
+
+    .icon-size-demo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background-color: var(--garden-color-background-subtle, #f8f9f9);
+        border-radius: 4px;
+        color: var(--garden-color-foreground-default, #2f3941);
+    }
+
+    .icon-size-demo span {
+        font-size: 12px;
+        color: var(--garden-color-foreground-subtle, #68737d);
     }
 </style>

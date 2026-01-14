@@ -6,6 +6,7 @@
   import type { Snippet } from 'svelte';
   import { getFieldContext } from './context';
   import { useRtl } from '../theming';
+  import { ChevronDownStroke } from '../icons';
 
   interface Props extends SelectProps {
     children?: Snippet;
@@ -51,9 +52,7 @@
       {@render children()}
     {/if}
   </select>
-  <svg class="garden-select__icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <path fill="currentColor" d="M12.688 5.61a.5.5 0 01.69.718l-.066.062-5 4a.5.5 0 01-.557.046l-.067-.046-5-4a.5.5 0 01.557-.83l.067.046L8 9.359l4.688-3.75z"/>
-  </svg>
+  <ChevronDownStroke class="garden-select__icon" />
 </div>
 
 <style>
@@ -84,12 +83,10 @@
       background-color 0.25s ease-in-out;
   }
 
-  .garden-select__icon {
+  :global(.garden-select__icon) {
     position: absolute;
     top: 50%;
     right: 12px;
-    width: 16px;
-    height: 16px;
     transform: translateY(-50%);
     pointer-events: none;
     color: var(--garden-color-foreground-subtle, #68737d);
@@ -100,7 +97,7 @@
     padding: 5px 36px 5px 12px;
   }
 
-  .garden-select--compact .garden-select__icon {
+  .garden-select--compact :global(.garden-select__icon) {
     right: 8px;
   }
 
@@ -109,7 +106,7 @@
     padding: 9px 12px 9px 36px;
   }
 
-  .garden-select--rtl .garden-select__icon {
+  .garden-select--rtl :global(.garden-select__icon) {
     right: auto;
     left: 12px;
   }
@@ -118,7 +115,7 @@
     padding: 5px 12px 5px 36px;
   }
 
-  .garden-select--rtl.garden-select--compact .garden-select__icon {
+  .garden-select--rtl.garden-select--compact :global(.garden-select__icon) {
     left: 8px;
   }
 

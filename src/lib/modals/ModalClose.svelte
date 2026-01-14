@@ -5,6 +5,7 @@
   import type { ModalCloseProps } from './types';
   import { getModalContext } from './context';
   import { useRtl } from '../theming';
+  import { XStroke } from '../icons';
 
   let {
     'aria-label': ariaLabel = 'Close modal',
@@ -31,9 +32,7 @@
   data-garden-id="modals.close"
   {...restProps}
 >
-  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <path fill="currentColor" d="M12.707 4.707l-1.414-1.414L8 6.586 4.707 3.293 3.293 4.707 6.586 8l-3.293 3.293 1.414 1.414L8 9.414l3.293 3.293 1.414-1.414L9.414 8z"/>
-  </svg>
+  <XStroke />
 </button>
 
 <style>
@@ -82,7 +81,7 @@
       0 0 0 3px #1f73b7;
   }
 
-  .garden-modal-close svg {
+  .garden-modal-close :global(svg) {
     width: 16px;
     height: 16px;
   }

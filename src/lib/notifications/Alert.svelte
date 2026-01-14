@@ -13,6 +13,7 @@
   import type { AlertProps } from './types';
   import type { Snippet } from 'svelte';
   import { useRtl } from '../theming';
+  import { InfoStroke, CheckCircleStroke, AlertWarningStroke, XCircleStroke } from '../icons';
 
   interface Props extends AlertProps {
     children?: Snippet;
@@ -33,14 +34,6 @@
     isRtl && 'garden-alert--rtl',
     className
   ].filter(Boolean).join(' '));
-
-  // SVG icons matching @zendeskgarden/svg-icons stroke style
-  const icons = {
-    info: '<circle cx="8" cy="8" r="6.5" stroke="currentColor" fill="none" stroke-width="1"/><path d="M8 11V8M8 5.5v-.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>',
-    success: '<circle cx="8" cy="8" r="6.5" stroke="currentColor" fill="none" stroke-width="1"/><path d="M5.5 8l2 2 3-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
-    warning: '<path d="M8 3L2 13h12L8 3z" stroke="currentColor" fill="none" stroke-width="1" stroke-linejoin="round"/><path d="M8 10V7M8 11.5v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>',
-    error: '<circle cx="8" cy="8" r="6.5" stroke="currentColor" fill="none" stroke-width="1"/><path d="M6 6l4 4M10 6l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>'
-  };
 </script>
 
 <div
@@ -49,9 +42,17 @@
   data-garden-id="notifications.alert"
   {...restProps}
 >
-  <svg class="garden-alert__icon" viewBox="0 0 16 16" aria-hidden="true">
-    {@html icons[type]}
-  </svg>
+  <span class="garden-alert__icon">
+    {#if type === 'info'}
+      <InfoStroke />
+    {:else if type === 'success'}
+      <CheckCircleStroke />
+    {:else if type === 'warning'}
+      <AlertWarningStroke />
+    {:else if type === 'error'}
+      <XCircleStroke />
+    {/if}
+  </span>
   
   <div class="garden-alert__content">
     {#if children}{@render children()}{/if}
@@ -101,10 +102,15 @@
   .garden-alert__icon {
     position: absolute;
     left: 16px;
-    top: 22px;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    height: 20px; /* Match line-height of text */
+  }
+
+  .garden-alert__icon :global(svg) {
     width: 16px;
     height: 16px;
-    flex-shrink: 0;
   }
 
   .garden-alert--info .garden-alert__icon {

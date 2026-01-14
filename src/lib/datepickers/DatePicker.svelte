@@ -9,6 +9,7 @@
   import type { Snippet } from 'svelte';
   import { formatDate as defaultFormatDate, parseDate as defaultParseDate, getLocaleWeekStartsOn } from './utils';
   import Calendar from './Calendar.svelte';
+  import { CalendarStroke } from '../icons';
 
   interface Props extends DatePickerProps {
     children?: Snippet;
@@ -157,9 +158,7 @@
       {disabled}
       onclick={() => { if (!disabled) { isOpen = !isOpen; inputRef?.focus(); } }}
     >
-      <svg viewBox="0 0 16 16" fill="currentColor">
-        <path d="M12 2h1c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h1V1h2v1h4V1h2v1zm1 5H3v6h10V7z"/>
-      </svg>
+      <CalendarStroke />
     </button>
   </div>
   
@@ -273,7 +272,7 @@
     cursor: not-allowed;
   }
 
-  .garden-date-picker__icon-button svg {
+  .garden-date-picker__icon-button :global(svg) {
     width: 16px;
     height: 16px;
   }

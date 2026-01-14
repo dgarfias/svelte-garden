@@ -21,6 +21,14 @@
       "svelte": "./dist/buttons/index.js",
       "default": "./dist/buttons/index.js"
     },
+    "./ckeditor": {
+      "types": "./dist/ckeditor/index.d.ts",
+      "svelte": "./dist/ckeditor/index.js",
+      "default": "./dist/ckeditor/index.js"
+    },
+    "./ckeditor/gardenIconsPlugin": {
+      "default": "./dist/ckeditor/gardenIconsPlugin.js"
+    },
     "./styles/*.css": "./dist/styles/*.css"
   },
   "files": [
@@ -74,6 +82,7 @@
     "url": "https://github.com/dgarfias/svelte-garden"
   },
   "dependencies": {
+    "ckeditor5": "^47.3.0",
     "prismjs": "^1.30.0"
   }
 }

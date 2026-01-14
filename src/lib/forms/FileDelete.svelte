@@ -13,6 +13,7 @@
 -->
 <script lang="ts">
   import type { HTMLButtonAttributes } from 'svelte/elements';
+  import { TrashStroke } from '../icons';
 
   interface Props extends HTMLButtonAttributes {
     /** Whether the button is disabled */
@@ -40,9 +41,7 @@
   data-garden-id="forms.file_delete"
   {...restProps}
 >
-  <svg viewBox="0 0 16 16" aria-hidden="true">
-    <path fill="currentColor" d="M6 1a1 1 0 00-1 1H3a1 1 0 000 2h10a1 1 0 100-2h-2a1 1 0 00-1-1H6zM4 5v9a2 2 0 002 2h4a2 2 0 002-2V5H4zm2 2h1v6H6V7zm3 0h1v6H9V7z"/>
-  </svg>
+  <TrashStroke size={12} />
 </button>
 
 <style>
@@ -86,7 +85,7 @@
     cursor: not-allowed;
   }
 
-  .garden-file-delete svg {
+  .garden-file-delete :global(svg) {
     width: 12px;
     height: 12px;
   }

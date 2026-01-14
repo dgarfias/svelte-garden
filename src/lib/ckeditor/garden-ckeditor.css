@@ -1,0 +1,1364 @@
+/**
+ * Copyright Zendesk, Inc.
+ *
+ * Use of this source code is governed under the Apache License, Version 2.0
+ * found at http://www.apache.org/licenses/LICENSE-2.0.
+ * 
+ * Garden CKEditor Theme - Svelte Garden Implementation
+ * Ported from @zendeskgarden/ckeditor Tailwind CSS to plain CSS
+ */
+
+/* =============================================================================
+   Animations (exactly as in Garden)
+   ============================================================================= */
+
+@keyframes zd-menu--top-open {
+  0% {
+    transform: translateY(20px);
+    pointer-events: none;
+  }
+}
+
+@keyframes zd-menu--bottom-open {
+  0% {
+    transform: translateY(-20px);
+    pointer-events: auto;
+  }
+}
+
+/* =============================================================================
+   CSS Custom Properties (CKEditor 5 Theme Variables)
+   ============================================================================= */
+
+:root {
+  /* Typography */
+  --ck-font-face: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Ubuntu", "Droid Sans", "Helvetica Neue", sans-serif;
+  --ck-font-size-base: 14px;
+  --ck-font-size-tiny: 12px;
+  --ck-font-size-small: 13px;
+  --ck-font-size-normal: 14px;
+  --ck-font-size-big: 18px;
+  --ck-font-size-large: 20px;
+  --ck-font-size-extra-large: 24px;
+  --ck-line-height-base: 20px;
+
+  /* Spacing */
+  --ck-spacing-unit: 4px;
+  --ck-spacing-extra-large: 16px;
+  --ck-spacing-large: 12px;
+  --ck-spacing-standard: 8px;
+  --ck-spacing-medium: 4px;
+  --ck-spacing-small: 2px;
+  --ck-spacing-tiny: 1px;
+  
+  /* Border radius */
+  --ck-border-radius: 4px;
+  --ck-border-radius-small: 2px;
+
+  /* Icon size */
+  --ck-icon-size: 16px;
+
+  /* Base colors - Garden palette (Light mode) */
+  --ck-color-base-background: #ffffff;
+  --ck-color-base-foreground: #ffffff;
+  --ck-color-base-border: #d8dcde;
+  --ck-color-base-action: #037f52;
+  --ck-color-base-focus: #1f73b7;
+  --ck-color-base-text: #293239;
+  --ck-color-base-error: #cd3642;
+
+  /* Focus styles */
+  --ck-color-focus-border: #1f73b7;
+  --ck-focus-outer-shadow: 0 0 0 3px rgba(31, 115, 183, 0.35);
+  
+  /* Shadows */
+  --ck-drop-shadow: 0 16px 20px 0 rgba(10, 13, 14, 0.16);
+  --ck-inner-shadow: inset 0 0 0 1px #1f73b7;
+
+  /* Button colors */
+  --ck-color-button-default-background: transparent;
+  --ck-color-button-default-hover-background: rgba(31, 115, 183, 0.08);
+  --ck-color-button-default-active-background: rgba(31, 115, 183, 0.16);
+  --ck-color-button-default-active-shadow: transparent;
+  --ck-color-button-default-disabled-background: transparent;
+
+  --ck-color-button-on-color: #293239;
+  --ck-color-button-on-background: rgba(31, 115, 183, 0.16);
+  --ck-color-button-on-hover-background: rgba(31, 115, 183, 0.16);
+  --ck-color-button-on-active-background: rgba(31, 115, 183, 0.16);
+  --ck-color-button-on-active-shadow: transparent;
+  --ck-color-button-on-disabled-background: transparent;
+
+  --ck-color-button-save: #037f52;
+  --ck-color-button-cancel: #cd3642;
+  
+  /* Tooltip colors */
+  --ck-color-tooltip-background: #293239;
+  --ck-color-tooltip-text: #ffffff;
+}
+
+/* =============================================================================
+   Dark Mode Variables
+   ============================================================================= */
+
+[data-garden-color-scheme="dark"] {
+  --ck-color-base-background: #151a1e;
+  --ck-color-base-foreground: #1c2227;
+  --ck-color-base-border: #39434b;
+  --ck-color-base-text: #ffffff;
+  --ck-color-base-focus: #66a0cd;
+
+  --ck-drop-shadow: 0 16px 20px 0 rgba(10, 13, 14, 0.64);
+  --ck-focus-outer-shadow: 0 0 0 3px rgba(102, 160, 205, 0.35);
+  --ck-inner-shadow: inset 0 0 0 1px #66a0cd;
+
+  --ck-color-button-default-hover-background: rgba(102, 160, 205, 0.08);
+  --ck-color-button-default-active-background: rgba(102, 160, 205, 0.16);
+
+  --ck-color-button-on-background: rgba(102, 160, 205, 0.16);
+  --ck-color-button-on-hover-background: rgba(102, 160, 205, 0.16);
+  --ck-color-button-on-active-background: rgba(102, 160, 205, 0.16);
+
+  --ck-color-tooltip-background: #5c6970;
+}
+
+/* =============================================================================
+   Base Editor Styles
+   ============================================================================= */
+
+.ck.ck-editor {
+  font-family: var(--ck-font-face) !important;
+}
+
+.ck.ck-content,
+.ck.ck-toolbar,
+.ck.ck-balloon-panel {
+  font-family: var(--ck-font-face) !important;
+}
+
+.ck.ck-content,
+.ck.ck-toolbar {
+  border-color: var(--ck-color-base-border) !important;
+  background-color: var(--ck-color-base-background) !important;
+  color: var(--ck-color-base-text) !important;
+  font-size: var(--ck-font-size-base) !important;
+  line-height: var(--ck-line-height-base) !important;
+}
+
+/* Remove default focus outlines */
+.ck.ck-content,
+.ck.ck-toolbar,
+.ck.ck-balloon-panel {
+  outline: none !important;
+}
+
+.ck.ck-content *:focus,
+.ck.ck-toolbar *:focus,
+.ck.ck-balloon-panel *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.ck.ck-content *:focus-visible,
+.ck.ck-toolbar *:focus-visible {
+  outline: none !important;
+}
+
+/* Hide powered-by balloon */
+.ck.ck-balloon-panel.ck-powered-by-balloon {
+  display: none !important;
+}
+
+/* Content area */
+.ck.ck-content {
+  border: 1px solid var(--ck-color-base-border) !important;
+  padding: 0 16px !important;
+}
+
+.ck.ck-content > *:first-child {
+  margin-top: 16px !important;
+}
+
+.ck.ck-content > *:last-child {
+  margin-bottom: 16px !important;
+}
+
+/* Focused content area */
+.ck.ck-content.ck-focused.ck-editor__editable:not(.ck-editor__nested-editable) {
+  box-shadow: var(--ck-inner-shadow) !important;
+  border-color: var(--ck-color-base-focus) !important;
+}
+
+/* =============================================================================
+   Toolbar Styles
+   ============================================================================= */
+
+.ck.ck-toolbar {
+  padding: 4px !important;
+}
+
+/* Smaller toolbar buttons */
+.ck.ck-toolbar .ck-button {
+  padding: 4px 6px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+}
+
+.ck.ck-toolbar .ck-button .ck-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-button {
+  padding: 4px 8px !important;
+}
+
+.ck.ck-toolbar > .ck.ck-toolbar__separator,
+.ck.ck-toolbar > .ck-toolbar__items > .ck.ck-toolbar__separator {
+  margin: 0 4px !important;
+  height: 28px !important;
+  background-color: #e8eaec !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-toolbar > .ck.ck-toolbar__separator,
+[data-garden-color-scheme="dark"] .ck.ck-toolbar > .ck-toolbar__items > .ck.ck-toolbar__separator {
+  background-color: #293239 !important;
+}
+
+.ck.ck-toolbar .ck-toolbar__items,
+.ck.ck-toolbar .ck-toolbar__items * {
+  font: inherit !important;
+}
+
+/* =============================================================================
+   Button Styles
+   ============================================================================= */
+
+.ck.ck-button {
+  color: #5c6970 !important;
+  transition: 
+    border-color 0.25s ease-in-out,
+    box-shadow 0.1s ease-in-out,
+    background-color 0.25s ease-in-out,
+    color 0.25s ease-in-out !important;
+}
+
+.ck.ck-button:not(.ck-disabled) {
+  cursor: pointer !important;
+}
+
+.ck.ck-button.ck-button_with-text {
+  color: var(--ck-color-base-text) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-button {
+  color: #919ca5 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-button.ck-button_with-text {
+  color: #ffffff !important;
+}
+
+.ck.ck-button:hover:not(.ck-disabled) {
+  background-color: var(--ck-color-button-default-hover-background) !important;
+  color: #39434b !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-button:hover:not(.ck-disabled) {
+  color: #b0b8be !important;
+}
+
+.ck.ck-button:focus-visible {
+  box-shadow: var(--ck-focus-outer-shadow) !important;
+  outline: none !important;
+}
+
+.ck.ck-button:active:not(.ck-disabled) {
+  background-color: var(--ck-color-button-default-active-background) !important;
+  color: var(--ck-color-base-text) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-button:active:not(.ck-disabled) {
+  color: #d8dcde !important;
+}
+
+/* Button pressed/active states */
+.ck.ck-button[aria-expanded="true"],
+.ck.ck-button[aria-pressed="true"],
+.ck.ck-button.ck-on {
+  background-color: var(--ck-color-button-default-active-background) !important;
+  color: var(--ck-color-base-text) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-button[aria-expanded="true"],
+[data-garden-color-scheme="dark"] .ck.ck-button[aria-pressed="true"],
+[data-garden-color-scheme="dark"] .ck.ck-button.ck-on {
+  color: #d8dcde !important;
+}
+
+/* Disabled buttons */
+.ck.ck-button[aria-disabled="true"],
+.ck.ck-button.ck-disabled {
+  background-color: transparent !important;
+  color: #848f99 !important;
+  cursor: not-allowed !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-button[aria-disabled="true"],
+[data-garden-color-scheme="dark"] .ck.ck-button.ck-disabled {
+  color: #5c6970 !important;
+}
+
+/* =============================================================================
+   Dropdown Styles
+   ============================================================================= */
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__button {
+  border-radius: var(--ck-border-radius) !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__button[aria-expanded="true"] {
+  border-radius: var(--ck-border-radius) !important;
+}
+
+/* Dropdown arrow */
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__button > .ck-dropdown__arrow {
+  width: 16px !important;
+  height: 16px !important;
+  color: #5c6970 !important;
+  transition: transform 0.25s ease-in-out, color 0.1s ease-in-out !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-toolbar .ck-dropdown > .ck-dropdown__button > .ck-dropdown__arrow {
+  color: #919ca5 !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__button:hover > .ck-dropdown__arrow,
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__button:focus-visible > .ck-dropdown__arrow {
+  color: inherit !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__button.ck-on > .ck-dropdown__arrow {
+  transform: rotate(180deg) !important;
+}
+
+[dir="rtl"] .ck.ck-toolbar .ck-dropdown > .ck-dropdown__button.ck-on > .ck-dropdown__arrow {
+  transform: rotate(-180deg) !important;
+}
+
+/* Dropdown Panel */
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel {
+  background-color: var(--ck-color-base-background) !important;
+  border: 1px solid var(--ck-color-base-border) !important;
+  border-radius: var(--ck-border-radius) !important;
+  animation: 0.2s cubic-bezier(0.15, 0.85, 0.35, 1.2) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel {
+  border-color: #39434b !important;
+  background-color: #1c2227 !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel:not(.ck-dropdown__panel-visible) {
+  display: inline-block !important;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s linear !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel-visible {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel-visible.ck-dropdown__panel_ne,
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel-visible.ck-dropdown__panel_nw {
+  animation-name: zd-menu--top-open !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel-visible.ck-dropdown__panel_se,
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel-visible.ck-dropdown__panel_sw {
+  animation-name: zd-menu--bottom-open !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel_ne,
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel_nw {
+  bottom: calc(100% + 4px) !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel_se,
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel.ck-dropdown__panel_sw {
+  top: calc(100% + 4px) !important;
+}
+
+/* Dropdown panel toolbar */
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-toolbar {
+  border-radius: var(--ck-border-radius) !important;
+}
+
+/* =============================================================================
+   List/Menu Styles
+   ============================================================================= */
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list {
+  background-color: inherit !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item:first-child {
+  margin-top: 4px !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item:last-child {
+  margin-bottom: 4px !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button {
+  position: relative !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 8px 36px !important;
+  width: 100% !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+}
+
+/* Checkmark icon for selected items */
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  inset-inline-start: 12px !important;
+  width: 16px !important;
+  height: 16px !important;
+  opacity: 0 !important;
+  transition: opacity 0.1s ease-in-out !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%231f73b7' stroke-linecap='round' stroke-linejoin='round' d='M1 9l4 4L15 3'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%2366a0cd' stroke-linecap='round' stroke-linejoin='round' d='M1 9l4 4L15 3'/%3E%3C/svg%3E") !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button[aria-checked="true"]::before {
+  opacity: 1 !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button[aria-checked="true"] {
+  background-color: transparent !important;
+}
+
+/* Left border hover effect (Garden menu style) */
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button:hover,
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button:focus-visible {
+  background-color: var(--ck-color-button-default-hover-background) !important;
+  box-shadow: inset 3px 0 #1f73b7 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button:hover,
+[data-garden-color-scheme="dark"] .ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button:focus-visible {
+  box-shadow: inset 3px 0 #66a0cd !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Dark mode for dropdown list item text */
+[data-garden-color-scheme="dark"] .ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button {
+  color: #d8dcde !important;
+  background-color: #1f2428 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button > .ck-button__label {
+  color: #d8dcde !important;
+}
+
+/* Heading styles in dropdown */
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading1 > .ck-button__label,
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading2 > .ck-button__label,
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading3 > .ck-button__label {
+  font-weight: 600 !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading1 {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading1 > .ck-button__label {
+  font-size: 24px !important;
+  line-height: 32px !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading2 {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading2 > .ck-button__label {
+  font-size: 20px !important;
+  line-height: 28px !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading3 {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button.ck-heading_heading3 > .ck-button__label {
+  font-size: 18px !important;
+  line-height: 24px !important;
+}
+
+/* Hide the CKEditor checkmark holder - we use CSS ::before instead */
+.ck.ck-toolbar .ck-dropdown > .ck-dropdown__panel > .ck-list > .ck-list__item > .ck-button > .ck-list-item-button__check-holder {
+  display: none !important;
+}
+
+/* =============================================================================
+   Tooltip Styles
+   ============================================================================= */
+
+.ck.ck-balloon-panel.ck-tooltip {
+  font-family: var(--ck-font-face) !important;
+  background-color: var(--ck-color-tooltip-background) !important;
+  border-color: var(--ck-color-tooltip-background) !important;
+  color: var(--ck-color-tooltip-text) !important;
+  border-radius: var(--ck-border-radius-small) !important;
+  box-shadow: 0 4px 8px 0 rgba(10, 13, 14, 0.16) !important;
+  height: 20px !important;
+  padding: 0 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-balloon-panel.ck-tooltip {
+  background-color: #5c6970 !important;
+  border-color: #5c6970 !important;
+  box-shadow: 0 4px 8px 0 rgba(10, 13, 14, 0.88) !important;
+}
+
+.ck.ck-balloon-panel.ck-tooltip > .ck-tooltip__text {
+  display: block !important;
+  margin-top: -1px !important;
+  padding: 0 12px !important;
+  font-size: var(--ck-font-size-small) !important;
+  line-height: var(--ck-line-height-base) !important;
+}
+
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_with-arrow::after {
+  background-color: inherit !important;
+  border: none !important;
+  transform: rotate(45deg) !important;
+  width: 10.49px !important;
+  height: 10.49px !important;
+}
+
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_n::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_ne::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_nw::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_nme::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_nmw::after {
+  top: -4.94px !important;
+}
+
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_s::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_se::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_sw::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_sme::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_smw::after {
+  bottom: -4.94px !important;
+}
+
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_n::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_ne::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_nw::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_nme::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_nmw::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_s::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_se::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_sw::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_sme::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_smw::after {
+  margin-left: -5.245px !important;
+}
+
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_e::after {
+  right: -4.94px !important;
+}
+
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_w::after {
+  left: -4.94px !important;
+}
+
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_e::after,
+.ck.ck-balloon-panel.ck-tooltip.ck-balloon-panel_arrow_w::after {
+  margin-top: -5.245px !important;
+}
+
+/* =============================================================================
+   Balloon Panel Styles (Link editing, etc.)
+   ============================================================================= */
+
+.ck.ck-balloon-panel:not(.ck-tooltip) {
+  background-color: var(--ck-color-base-background) !important;
+  border: 1px solid var(--ck-color-base-border) !important;
+  border-radius: var(--ck-border-radius) !important;
+  box-shadow: var(--ck-drop-shadow) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-balloon-panel:not(.ck-tooltip) {
+  border-color: #39434b !important;
+  background-color: #1c2227 !important;
+}
+
+.ck.ck-balloon-panel::before,
+.ck.ck-balloon-panel::after {
+  z-index: auto !important;
+  border-style: inherit !important;
+}
+
+.ck.ck-balloon-panel::before {
+  border-color: inherit !important;
+  clip-path: polygon(100% 2px, 2px 100%, 100% 100%) !important;
+}
+
+.ck.ck-balloon-panel::after {
+  border-color: transparent !important;
+  clip-path: polygon(100% 0, 0 100%, 100% 100%) !important;
+  background-clip: content-box !important;
+}
+
+.ck.ck-balloon-panel::before,
+.ck.ck-balloon-panel::after {
+  background-color: inherit !important;
+  margin: 0 !important;
+  width: 13.31px !important;
+  height: 13.31px !important;
+  border-width: inherit !important;
+}
+
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_n::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_ne::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nw::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nme::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nmw::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_n::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_ne::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nw::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nme::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nmw::after {
+  transform: rotate(-135deg) !important;
+  top: -5.35px !important;
+}
+
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_s::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_se::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_sw::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_sme::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_smw::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_s::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_se::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_sw::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_sme::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_smw::after {
+  transform: rotate(45deg) !important;
+  bottom: -5.35px !important;
+}
+
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_n::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_ne::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nw::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nme::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nmw::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_n::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_ne::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nw::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nme::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_nmw::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_s::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_se::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_sw::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_sme::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_smw::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_s::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_se::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_sw::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_sme::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_smw::after {
+  margin-left: -6.655px !important;
+}
+
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_e::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_e::after {
+  transform: rotate(-45deg) !important;
+  right: -5.35px !important;
+}
+
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_w::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_w::after {
+  transform: rotate(135deg) !important;
+  left: -5.35px !important;
+}
+
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_e::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_e::after,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_w::before,
+.ck.ck-balloon-panel.ck-balloon-panel_arrow_w::after {
+  margin-top: -6.655px !important;
+}
+
+/* =============================================================================
+   Input Styles
+   ============================================================================= */
+
+.ck.ck-input {
+  background-color: var(--ck-color-base-background) !important;
+  border: 1px solid #b0b8be !important;
+  border-radius: var(--ck-border-radius) !important;
+  color: var(--ck-color-base-text) !important;
+  font-family: var(--ck-font-face) !important;
+  font-size: var(--ck-font-size-base) !important;
+  transition: border-color 0.25s ease-in-out, box-shadow 0.1s ease-in-out !important;
+}
+
+.ck.ck-input:hover {
+  border-color: #1f73b7 !important;
+}
+
+.ck.ck-input:focus-visible {
+  border-color: #1f73b7 !important;
+  box-shadow: var(--ck-focus-outer-shadow) !important;
+  outline: none !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-input {
+  border-color: #5c6970 !important;
+  background-color: #151a1e !important;
+  color: #d8dcde !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-input:hover {
+  border-color: #66a0cd !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-input:focus-visible {
+  border-color: #66a0cd !important;
+}
+
+.ck.ck-input + .ck-label {
+  font-family: var(--ck-font-face) !important;
+  font-weight: 600 !important;
+  font-size: var(--ck-font-size-small) !important;
+  border-radius: var(--ck-border-radius-small) !important;
+  background-color: var(--ck-color-base-background) !important;
+  color: var(--ck-color-base-text) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-input + .ck-label {
+  background-color: #151a1e !important;
+  color: #d8dcde !important;
+}
+
+/* =============================================================================
+   Content Typography
+   ============================================================================= */
+
+.ck.ck-content h2,
+.ck.ck-content h3,
+.ck.ck-content h4,
+.ck.ck-content h5,
+.ck.ck-content strong {
+  font-weight: 600 !important;
+}
+
+.ck.ck-content u {
+  text-decoration: underline !important;
+}
+
+.ck.ck-content h2 {
+  margin-bottom: 16px !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+}
+
+.ck.ck-content h3 {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+  font-size: 20px !important;
+  line-height: 28px !important;
+}
+
+.ck.ck-content h4 {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+  font-size: 18px !important;
+  line-height: 24px !important;
+}
+
+.ck.ck-content h5,
+.ck.ck-content p {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+/* Ensure indented content displays properly */
+.ck.ck-content p[style*="margin-left"],
+.ck.ck-content p[style*="margin-inline-start"] {
+  margin-left: var(--ck-indent-offset, 40px);
+}
+
+/* =============================================================================
+   Link Styles
+   ============================================================================= */
+
+.ck.ck-content a,
+.ck.ck-balloon-panel .ck-link-actions > a.ck-button > .ck-button__label {
+  color: #1f73b7 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content a,
+[data-garden-color-scheme="dark"] .ck.ck-balloon-panel .ck-link-actions > a.ck-button > .ck-button__label {
+  color: #66a0cd !important;
+}
+
+.ck.ck-content a:hover,
+.ck.ck-balloon-panel .ck-link-actions > a.ck-button:hover > .ck-button__label {
+  color: #13456d !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content a:hover,
+[data-garden-color-scheme="dark"] .ck.ck-balloon-panel .ck-link-actions > a.ck-button:hover > .ck-button__label {
+  color: #93bcdc !important;
+}
+
+.ck.ck-content a.ck-link_selected {
+  background-color: transparent !important;
+}
+
+.ck.ck-balloon-panel .ck-link-actions > a.ck-button > .ck-button__label {
+  text-decoration: underline !important;
+  font-size: var(--ck-font-size-base) !important;
+  line-height: 26px !important;
+}
+
+/* Link form styles */
+.ck.ck-link-form {
+  display: flex !important;
+  align-items: center !important;
+  padding: 8px !important;
+  gap: 8px !important;
+}
+
+.ck.ck-link-form .ck-labeled-field-view {
+  flex: 1 !important;
+}
+
+.ck.ck-link-form .ck-labeled-field-view__input-wrapper {
+  position: relative !important;
+}
+
+.ck.ck-link-form .ck-input {
+  padding: 8px 12px !important;
+  min-width: 220px !important;
+}
+
+.ck.ck-link-form .ck-label {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  left: 12px !important;
+  color: #68737d !important;
+  pointer-events: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.ck.ck-link-form .ck-labeled-field-view:not(.ck-labeled-field-view_empty) .ck-label,
+.ck.ck-link-form .ck-input:focus + .ck-label {
+  top: -8px !important;
+  left: 8px !important;
+  font-size: 11px !important;
+  background-color: var(--ck-color-base-background) !important;
+  padding: 0 4px !important;
+}
+
+.ck.ck-link-form .ck-button-save,
+.ck.ck-link-form .ck-button-cancel {
+  padding: 6px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+}
+
+/* Link actions styles (edit/unlink popup) */
+.ck.ck-link-actions {
+  display: flex !important;
+  align-items: center !important;
+  padding: 8px !important;
+  gap: 4px !important;
+}
+
+.ck.ck-link-actions .ck-link-actions__preview {
+  flex: 1 !important;
+  max-width: 200px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  padding: 4px 8px !important;
+  border-radius: var(--ck-border-radius) !important;
+}
+
+.ck.ck-link-actions .ck-link-actions__preview:hover {
+  background-color: rgba(31, 115, 183, 0.08) !important;
+}
+
+.ck.ck-link-actions .ck-button {
+  padding: 6px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+}
+
+/* Hide code block language dropdown since we only have one option (plain text) */
+.ck.ck-content pre[data-language]::before {
+  display: none !important;
+}
+
+.ck.ck-content .ck-code-block-dropdown {
+  display: none !important;
+}
+
+/* Hide the language label in code blocks */
+.ck.ck-widget.ck-code-block > .ck-widget__type-around + .ck-code-block__label {
+  display: none !important;
+}
+
+.ck.ck-content pre .ck-code-block-dropdown,
+.ck.ck-content pre .ck-dropdown {
+  display: none !important;
+}
+
+/* Hide the dropdown arrow on code block split button in toolbar */
+.ck.ck-toolbar .ck-code-block-dropdown .ck-splitbutton__arrow {
+  display: none !important;
+}
+
+/* Make the code block button look like a regular button without split */
+.ck.ck-toolbar .ck-code-block-dropdown .ck-splitbutton {
+  display: flex !important;
+}
+
+.ck.ck-toolbar .ck-code-block-dropdown .ck-splitbutton__action {
+  border-radius: var(--ck-border-radius) !important;
+}
+
+/* Hide the complex link form elements - use simple URL-only form like Garden React */
+.ck.ck-link-form .ck-form__header {
+  display: none !important;
+}
+
+/* Hide "Displayed text" field row - keep only Link URL */
+.ck.ck-link-form .ck-form__row:not(.ck-form__row_with-submit) {
+  display: none !important;
+}
+
+/* Style the link form to match Garden React (simple inline form) */
+.ck.ck-link-form.ck-form {
+  padding: 6px !important;
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+.ck.ck-link-form .ck-form__row_with-submit {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+}
+
+.ck.ck-link-form .ck-form__row_with-submit .ck-labeled-field-view {
+  flex: 0 1 auto !important;
+  margin: 0 !important;
+  min-width: 180px !important;
+}
+
+/* Smaller input in link form */
+.ck.ck-link-form .ck-input {
+  padding: 6px 10px !important;
+  font-size: 13px !important;
+  min-height: 28px !important;
+}
+
+.ck.ck-link-form .ck-label {
+  font-size: 12px !important;
+}
+
+/* Style the Insert/Save button as icon-only */
+.ck.ck-link-form .ck-button-action.ck-button-bold {
+  padding: 4px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  background-color: transparent !important;
+  color: #1f73b7 !important;
+}
+
+.ck.ck-link-form .ck-button-action.ck-button-bold .ck-button__label {
+  display: none !important;
+}
+
+.ck.ck-link-form .ck-button-action.ck-button-bold::before {
+  content: '' !important;
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%231f73b7' d='M6.972 16.615a.997.997 0 0 1-.744-.292l-4.596-4.596a1 1 0 1 1 1.414-1.414l3.926 3.926 9.937-9.937a1 1 0 0 1 1.414 1.415L7.717 16.323a.997.997 0 0 1-.745.292z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 16px 16px !important;
+}
+
+/* Style for simple link form (ck-button-save / ck-button-cancel) */
+.ck.ck-link-form .ck-button-save,
+.ck.ck-link-form .ck-button-cancel {
+  padding: 6px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  background-color: transparent !important;
+}
+
+.ck.ck-link-form .ck-button-save .ck-button__label,
+.ck.ck-link-form .ck-button-cancel .ck-button__label {
+  display: none !important;
+}
+
+/* Ensure the icons in save/cancel buttons use Garden style */
+.ck.ck-link-form .ck-button-save .ck-icon,
+.ck.ck-link-form .ck-button-cancel .ck-icon {
+  width: 20px !important;
+  height: 20px !important;
+  color: #68737d !important;
+}
+
+.ck.ck-link-form .ck-button-save:hover .ck-icon,
+.ck.ck-link-form .ck-button-cancel:hover .ck-icon {
+  color: #1f73b7 !important;
+}
+
+/* =============================================================================
+   Blockquote Styles
+   ============================================================================= */
+
+.ck.ck-content blockquote {
+  overflow: hidden !important;
+  font-style: inherit !important;
+  border-inline-start: 2px solid #d8dcde !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-inline-end: none !important;
+  margin: 16px 0 !important;
+  padding: 0 !important;
+  padding-inline-start: 16px !important;
+}
+
+.ck.ck-content blockquote:first-child {
+  margin-top: 0 !important;
+}
+
+.ck.ck-content blockquote:last-child {
+  margin-bottom: 0 !important;
+}
+
+.ck.ck-content blockquote pre {
+  margin: 16px 0 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content blockquote {
+  border-inline-start-color: #39434b !important;
+}
+
+/* =============================================================================
+   Code Styles
+   ============================================================================= */
+
+/* Inline code (from Code plugin) */
+.ck.ck-content code,
+.ck-content code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace !important;
+  direction: ltr !important;
+  background-color: #e8eaec !important;
+  color: #293239 !important;
+  border-radius: 2px !important;
+  padding: 1.5px 4px !important;
+  line-height: normal !important;
+  font-size: calc(1em - 1px) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content code,
+[data-garden-color-scheme="dark"] .ck-content code {
+  background-color: #293239 !important;
+  color: #d8dcde !important;
+}
+
+.ck.ck-content .ck-code_selected,
+.ck-content .ck-code_selected {
+  background-color: #e8eaec !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content .ck-code_selected,
+[data-garden-color-scheme="dark"] .ck-content .ck-code_selected {
+  background-color: #293239 !important;
+}
+
+/* Code Block (pre) */
+.ck.ck-content pre {
+  border: none !important;
+  overflow: auto !important;
+  white-space: pre !important;
+  margin: 16px 0 !important;
+  border-radius: var(--ck-border-radius-small) !important;
+  padding: 12px !important;
+  background-color: #f8f9f9 !important;
+  color: #293239 !important;
+}
+
+.ck.ck-content pre::after {
+  display: none !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content pre {
+  background-color: #0a0d0e !important;
+  color: #d8dcde !important;
+}
+
+.ck.ck-content pre code {
+  background-color: inherit !important;
+  color: inherit !important;
+  padding: 0 !important;
+}
+
+/* =============================================================================
+   List Styles
+   ============================================================================= */
+
+.ck.ck-content ol,
+.ck.ck-content ul {
+  list-style-position: outside !important;
+  margin: 16px 0 !important;
+  margin-inline-start: 24px !important;
+  padding: 0 !important;
+}
+
+.ck.ck-content ol ol,
+.ck.ck-content ol ul,
+.ck.ck-content ul ol,
+.ck.ck-content ul ul {
+  margin: 0 !important;
+}
+
+.ck.ck-content ol > li,
+.ck.ck-content ul > li {
+  margin-inline-start: -4px !important;
+  padding-top: 4px !important;
+  padding-inline-start: 4px !important;
+}
+
+.ck.ck-content ol > li:first-child,
+.ck.ck-content ul > li:first-child {
+  padding-top: 0 !important;
+}
+
+.ck.ck-content ol > li > ol > li:first-child,
+.ck.ck-content ol > li > ul > li:first-child,
+.ck.ck-content ul > li > ol > li:first-child,
+.ck.ck-content ul > li > ul > li:first-child {
+  padding-top: 4px !important;
+}
+
+/* =============================================================================
+   Horizontal Line Styles
+   ============================================================================= */
+
+.ck.ck-content .ck-horizontal-line {
+  margin: 16px 0 !important;
+  padding: 4px 0 !important;
+}
+
+.ck.ck-content .ck-horizontal-line.ck-widget_selected:not(
+  .ck-widget_type-around_show-fake-caret_before,
+  .ck-widget_type-around_show-fake-caret_after
+) {
+  border-radius: var(--ck-border-radius-small) !important;
+}
+
+.ck.ck-content .ck-horizontal-line hr {
+  margin: 0 !important;
+  height: 1px !important;
+  background-color: #d8dcde !important;
+  border: none !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content .ck-horizontal-line hr {
+  background-color: #39434b !important;
+}
+
+.ck.ck-content .ck-horizontal-line.ck-widget_selected:not(
+  .ck-widget_type-around_show-fake-caret_before,
+  .ck-widget_type-around_show-fake-caret_after
+) hr {
+  background-color: #1f73b7 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content .ck-horizontal-line.ck-widget_selected:not(
+  .ck-widget_type-around_show-fake-caret_before,
+  .ck-widget_type-around_show-fake-caret_after
+) hr {
+  background-color: #66a0cd !important;
+}
+
+/* =============================================================================
+   Table Styles
+   ============================================================================= */
+
+.ck.ck-content .table {
+  margin: 16px 0 !important;
+}
+
+.ck.ck-content .table table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+.ck.ck-content .table table td,
+.ck.ck-content .table table th {
+  border: 1px solid var(--ck-color-base-border) !important;
+  padding: 8px 12px !important;
+  min-width: 40px !important;
+}
+
+.ck.ck-content .table table th {
+  background-color: #f8f9f9 !important;
+  font-weight: 600 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-content .table table th {
+  background-color: #293239 !important;
+}
+
+/* =============================================================================
+   Widget Styles
+   ============================================================================= */
+
+.ck.ck-content .ck-widget.ck-widget_selected,
+.ck.ck-content .ck-widget.ck-widget_selected:hover {
+  outline: 2px solid var(--ck-color-base-focus) !important;
+}
+
+.ck.ck-content .ck-widget:hover {
+  outline: 1px solid #cce0f1 !important;
+}
+
+/* =============================================================================
+   Placeholder Styles
+   ============================================================================= */
+
+.ck.ck-content.ck-placeholder::before {
+  color: #848f99 !important;
+}
+
+/* =============================================================================
+   Type Around Widget Styles
+   ============================================================================= */
+
+.ck .ck-widget .ck-widget__type-around__button {
+  background-color: var(--ck-color-base-background) !important;
+  border-color: var(--ck-color-base-focus) !important;
+}
+
+.ck .ck-widget .ck-widget__type-around__button:hover {
+  background-color: var(--ck-color-base-focus) !important;
+}
+
+.ck .ck-widget .ck-widget__type-around__button svg * {
+  stroke: var(--ck-color-base-focus) !important;
+}
+
+.ck .ck-widget .ck-widget__type-around__button:hover svg * {
+  stroke: var(--ck-color-base-background) !important;
+}
+
+.ck .ck-widget .ck-widget__type-around__fake-caret {
+  background-color: var(--ck-color-base-focus) !important;
+}
+
+/* =============================================================================
+   Responsive
+   ============================================================================= */
+
+@media (max-width: 600px) {
+  .ck.ck-toolbar {
+    flex-wrap: wrap !important;
+  }
+  
+  .ck.ck-toolbar__items {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* =============================================================================
+   Dark Mode - Link Form & Balloon Panels
+   ============================================================================= */
+
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-input {
+  background-color: #1f2428 !important;
+  border-color: #49545c !important;
+  color: #d8dcde !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-input:hover {
+  border-color: #1f73b7 !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-input:focus {
+  border-color: #1f73b7 !important;
+  box-shadow: 0 0 0 3px rgba(31, 115, 183, 0.35) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-label {
+  color: #87929d !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-button-action.ck-button-bold {
+  color: #66a0cd !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-button-action.ck-button-bold::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%2366a0cd' d='M6.972 16.615a.997.997 0 0 1-.744-.292l-4.596-4.596a1 1 0 1 1 1.414-1.414l3.926 3.926 9.937-9.937a1 1 0 0 1 1.414 1.415L7.717 16.323a.997.997 0 0 1-.745.292z'/%3E%3C/svg%3E") !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-button-save .ck-icon,
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-button-cancel .ck-icon {
+  color: #87929d !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-button-save:hover .ck-icon,
+[data-garden-color-scheme="dark"] .ck.ck-link-form .ck-button-cancel:hover .ck-icon {
+  color: #66a0cd !important;
+}
+
+/* Dark mode for link actions (edit link popup) */
+[data-garden-color-scheme="dark"] .ck.ck-link-actions .ck-link-actions__preview {
+  color: #66a0cd !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-actions .ck-link-actions__preview:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-actions .ck-button .ck-icon {
+  color: #87929d !important;
+}
+
+[data-garden-color-scheme="dark"] .ck.ck-link-actions .ck-button:hover .ck-icon {
+  color: #66a0cd !important;
+}

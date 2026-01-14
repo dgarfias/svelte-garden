@@ -64,5 +64,11 @@ export * from './datepickers';
 // Draggable
 export * from './draggable';
 
+// CKEditor
+export * from './ckeditor';
+
+// Icons
+export * from './icons';
+
 // Utilities
 export * from './utils';

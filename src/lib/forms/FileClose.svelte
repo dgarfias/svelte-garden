@@ -13,6 +13,7 @@
 -->
 <script lang="ts">
   import type { HTMLButtonAttributes } from 'svelte/elements';
+  import { XStroke } from '../icons';
 
   interface Props extends HTMLButtonAttributes {
     /** Whether the button is disabled */
@@ -40,9 +41,7 @@
   data-garden-id="forms.file_close"
   {...restProps}
 >
-  <svg viewBox="0 0 16 16" aria-hidden="true">
-    <path fill="currentColor" d="M12.354 4.354a.5.5 0 00-.708-.708L8 7.293 4.354 3.646a.5.5 0 10-.708.708L7.293 8l-3.647 3.646a.5.5 0 00.708.708L8 8.707l3.646 3.647a.5.5 0 00.708-.708L8.707 8l3.647-3.646z"/>
-  </svg>
+  <XStroke size={12} />
 </button>
 
 <style>
@@ -86,7 +85,7 @@
     cursor: not-allowed;
   }
 
-  .garden-file-close svg {
+  .garden-file-close :global(svg) {
     width: 12px;
     height: 12px;
   }

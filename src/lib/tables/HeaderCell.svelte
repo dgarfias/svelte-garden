@@ -4,6 +4,7 @@
 <script lang="ts">
   import type { HeaderCellProps } from './types';
   import type { Snippet } from 'svelte';
+  import { SortStroke, ChevronUpFill, ChevronDownFill } from '../icons';
 
   interface Props extends HeaderCellProps {
     children?: Snippet;
@@ -44,15 +45,15 @@
   <span class="garden-th__content">
     {#if children}{@render children()}{/if}
     {#if isSortable}
-      <svg class="garden-th__sort-icon" viewBox="0 0 16 16" aria-hidden="true">
+      <span class="garden-th__sort-icon">
         {#if sortDirection === 'asc'}
-          <path fill="currentColor" d="M8 4l4 4H4z"/>
+          <ChevronUpFill size={12} />
         {:else if sortDirection === 'desc'}
-          <path fill="currentColor" d="M8 12l4-4H4z"/>
+          <ChevronDownFill size={12} />
         {:else}
-          <path fill="currentColor" d="M8 4l3 3H5zm0 8l3-3H5z"/>
+          <SortStroke size={12} />
         {/if}
-      </svg>
+      </span>
     {/if}
   </span>
 </th>
@@ -83,9 +84,12 @@
   }
 
   .garden-th__sort-icon {
-    width: 16px;
-    height: 16px;
     flex-shrink: 0;
+  }
+
+  .garden-th__sort-icon :global(svg) {
+    width: 12px;
+    height: 12px;
   }
 
   .garden-th--sort-asc .garden-th__sort-icon,

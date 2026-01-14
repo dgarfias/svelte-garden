@@ -11,6 +11,7 @@
   import type { BreadcrumbItemProps } from './types';
   import type { Snippet } from 'svelte';
   import { useRtl } from '../theming';
+  import { ChevronRightStroke } from '../icons';
 
   interface Props extends BreadcrumbItemProps {
     children?: Snippet;
@@ -52,9 +53,7 @@
     >
       {#if children}{@render children()}{/if}
     </a>
-    <svg class="garden-breadcrumb__separator" viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M5.5 3L10 8l-4.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    </svg>
+    <ChevronRightStroke class="garden-breadcrumb__separator" size={12} />
   {/if}
 </li>
 
@@ -92,20 +91,18 @@
     color: var(--garden-color-foreground-subtle, #68737d);
   }
 
-  .garden-breadcrumb__separator {
-    width: 12px;
-    height: 12px;
+  :global(.garden-breadcrumb__separator) {
     margin: 0 4px;
     color: var(--garden-color-foreground-subtle, #68737d);
     flex-shrink: 0;
   }
 
   /* RTL: rotate chevron 180 degrees */
-  .garden-breadcrumb__item--rtl .garden-breadcrumb__separator {
+  .garden-breadcrumb__item--rtl :global(.garden-breadcrumb__separator) {
     transform: rotate(180deg);
   }
 
-  .garden-breadcrumb__item--current .garden-breadcrumb__separator {
+  .garden-breadcrumb__item--current :global(.garden-breadcrumb__separator) {
     display: none;
   }
 </style>

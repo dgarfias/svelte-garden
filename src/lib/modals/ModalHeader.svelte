@@ -6,6 +6,7 @@
   import type { Snippet } from 'svelte';
   import { getModalContext } from './context';
   import { useRtl } from '../theming';
+  import { AlertErrorFill } from '../icons';
 
   interface Props extends ModalHeaderProps {
     children?: Snippet;
@@ -32,9 +33,7 @@
   {...restProps}
 >
   {#if isDanger}
-    <svg class="garden-modal-header__danger-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <path fill="currentColor" d="M8 0a8 8 0 110 16A8 8 0 018 0zm0 10.5a1 1 0 100 2 1 1 0 000-2zM8 4a1 1 0 00-1 1v4a1 1 0 102 0V5a1 1 0 00-1-1z"/>
-    </svg>
+    <AlertErrorFill class="garden-modal-header__danger-icon" />
   {/if}
   {#if children}
     {@render children()}
@@ -76,7 +75,7 @@
     padding-right: 56px;
   }
 
-  .garden-modal-header__danger-icon {
+  :global(.garden-modal-header__danger-icon) {
     position: absolute;
     top: 22px; /* 5.5 * 4px */
     left: 16px; /* 4 * 4px */
@@ -85,7 +84,7 @@
   }
 
   /* RTL: danger icon on right */
-  .garden-modal-header--rtl .garden-modal-header__danger-icon {
+  .garden-modal-header--rtl :global(.garden-modal-header__danger-icon) {
     left: auto;
     right: 16px;
   }

@@ -15,6 +15,7 @@
 <script lang="ts">
   import type { AnchorProps } from './types';
   import type { Snippet } from 'svelte';
+  import { NewWindowStroke } from '../icons';
 
   interface Props extends AnchorProps {
     children?: Snippet;
@@ -56,20 +57,7 @@
     {@render children()}
   {/if}
   {#if isExternal}
-    <svg
-      class="garden-anchor__external-icon"
-      xmlns="http://www.w3.org/2000/svg"
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      aria-label={externalIconLabel}
-      role="img"
-    >
-      <path
-        fill="currentColor"
-        d="M10 1v4a1 1 0 0 1-2 0V3.414L4.707 6.707a1 1 0 0 1-1.414-1.414L6.586 2H5a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1zM8 10H3V5a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1h6a1 1 0 0 0 0-2z"
-      />
-    </svg>
+    <NewWindowStroke class="garden-anchor__external-icon" size={12} aria-label={externalIconLabel} />
   {/if}
 </a>
 
@@ -118,7 +106,7 @@
   }
 
   /* External icon */
-  .garden-anchor__external-icon {
+  :global(.garden-anchor__external-icon) {
     margin-left: 0.25em;
     vertical-align: middle;
   }

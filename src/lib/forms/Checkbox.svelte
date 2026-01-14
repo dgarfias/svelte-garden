@@ -14,6 +14,7 @@
   import type { Snippet } from 'svelte';
   import { getFieldContext } from './context';
   import { useRtl } from '../theming';
+  import { DashFill, CheckSmFill } from '../icons';
 
   interface Props extends CheckboxProps {
     children?: Snippet;
@@ -66,15 +67,9 @@
   />
   <span class="garden-checkbox__box">
     {#if indeterminate}
-      <!-- Dash icon for indeterminate - matches @zendeskgarden/svg-icons 12/dash-fill -->
-      <svg class="garden-checkbox__icon" viewBox="0 0 12 12" aria-hidden="true">
-        <path fill="currentColor" d="M10 5H2a1 1 0 000 2h8a1 1 0 000-2z"/>
-      </svg>
+      <DashFill class="garden-checkbox__icon" size={12} />
     {:else}
-      <!-- Checkmark icon - matches @zendeskgarden/svg-icons 12/check-sm-fill -->
-      <svg class="garden-checkbox__icon" viewBox="0 0 12 12" aria-hidden="true">
-        <path fill="currentColor" d="M10.28 2.72a.75.75 0 01.04 1.02l-.04.04-5.25 5.25a.75.75 0 01-1.02.04l-.04-.04-2.25-2.25a.75.75 0 011.02-1.1l.04.04L4.5 7.44l4.72-4.72a.75.75 0 011.06 0z"/>
-      </svg>
+      <CheckSmFill class="garden-checkbox__icon" size={12} />
     {/if}
   </span>
   {#if children}
@@ -118,9 +113,7 @@
       box-shadow 0.1s ease-in-out;
   }
 
-  .garden-checkbox__icon {
-    width: 12px;
-    height: 12px;
+  :global(.garden-checkbox__icon) {
     color: var(--garden-color-foreground-on-emphasis, #fff);
     opacity: 0;
     transition: opacity 0.25s ease-in-out;
@@ -156,8 +149,8 @@
     background-color: var(--garden-color-background-primary-emphasis, #1f73b7);
   }
 
-  .garden-checkbox__input:checked + .garden-checkbox__box .garden-checkbox__icon,
-  .garden-checkbox__input:indeterminate + .garden-checkbox__box .garden-checkbox__icon {
+  .garden-checkbox__input:checked + .garden-checkbox__box :global(.garden-checkbox__icon),
+  .garden-checkbox__input:indeterminate + .garden-checkbox__box :global(.garden-checkbox__icon) {
     opacity: 1;
   }
 
@@ -200,7 +193,7 @@
     background-color: var(--garden-color-background-disabled, rgba(0, 0, 0, 0.24));
   }
 
-  .garden-checkbox--disabled .garden-checkbox__icon {
+  .garden-checkbox--disabled :global(.garden-checkbox__icon) {
     color: var(--garden-color-foreground-disabled, #c2c8cc);
   }
 

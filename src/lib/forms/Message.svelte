@@ -5,6 +5,7 @@
   import type { MessageProps } from './types';
   import type { Snippet } from 'svelte';
   import { getFieldContext } from './context';
+  import { CheckCircleFill, AlertWarningFill, AlertErrorFill } from '../icons';
 
   interface Props extends MessageProps {
     children?: Snippet;
@@ -28,15 +29,15 @@
   data-garden-id="forms.message"
 >
   {#if effectiveValidation}
-    <svg class="garden-message__icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-label={validationLabel}>
+    <span class="garden-message__icon" aria-label={validationLabel}>
       {#if effectiveValidation === 'success'}
-        <path fill="currentColor" d="M8 0a8 8 0 110 16A8 8 0 018 0zm3.54 4.96L6.5 9.5 4.46 7.46l-1.42 1.42 3.54 3.54 6.46-6.46-1.5-1.5z"/>
+        <CheckCircleFill />
       {:else if effectiveValidation === 'warning'}
-        <path fill="currentColor" d="M8.00001 0C12.4 0 16 3.6 16 8C16 12.4 12.4 16 8.00001 16C3.60001 16 0 12.4 0 8C0 3.6 3.60001 0 8.00001 0ZM8.8 12V10H7.2V12H8.8ZM8.8 8.8V4H7.2V8.8H8.8Z"/>
+        <AlertWarningFill />
       {:else if effectiveValidation === 'error'}
-        <path fill="currentColor" d="M8 0a8 8 0 110 16A8 8 0 018 0zm0 10.5a1 1 0 100 2 1 1 0 000-2zM8 4a1 1 0 00-1 1v4a1 1 0 102 0V5a1 1 0 00-1-1z"/>
+        <AlertErrorFill />
       {/if}
-    </svg>
+    </span>
   {/if}
   <span class="garden-message__text">
     {#if children}
@@ -62,9 +63,12 @@
 
   .garden-message__icon {
     flex-shrink: 0;
+    margin-top: -1px;
+  }
+
+  .garden-message__icon :global(svg) {
     width: 16px;
     height: 16px;
-    margin-top: -1px;
   }
 
   .garden-message__text {

@@ -7,6 +7,7 @@
   import type { CursorButtonProps } from './types';
   import type { Snippet } from 'svelte';
   import { useRtl } from '../theming';
+  import { ChevronDoubleRightStroke } from '../icons';
 
   interface Props extends CursorButtonProps {
     children?: Snippet;
@@ -37,9 +38,7 @@
   {#if children}
     {@render children()}
   {:else}
-    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-      <path d="M5 2.5L10.5 8 5 13.5M12 2.5v11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    <ChevronDoubleRightStroke />
   {/if}
 </button>
 

@@ -48,7 +48,6 @@
 <style>
   .garden-tabpanel {
     display: block;
-    vertical-align: top;
   }
 
   .garden-tabpanel:focus {

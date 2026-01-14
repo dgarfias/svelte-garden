@@ -6,6 +6,7 @@
 <script lang="ts">
   import type { DraggableGripProps } from './types';
   import type { Snippet } from 'svelte';
+  import { GripStroke } from '../icons';
 
   interface Props extends DraggableGripProps {
     children?: Snippet;
@@ -32,14 +33,7 @@
   {#if children}
     {@render children()}
   {:else}
-    <svg viewBox="0 0 16 16" fill="currentColor">
-      <circle cx="5" cy="3" r="1.5"/>
-      <circle cx="11" cy="3" r="1.5"/>
-      <circle cx="5" cy="8" r="1.5"/>
-      <circle cx="11" cy="8" r="1.5"/>
-      <circle cx="5" cy="13" r="1.5"/>
-      <circle cx="11" cy="13" r="1.5"/>
-    </svg>
+    <GripStroke />
   {/if}
 </div>
 

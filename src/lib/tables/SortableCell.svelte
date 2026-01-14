@@ -15,6 +15,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import type { HTMLButtonAttributes } from 'svelte/elements';
+  import { SortStroke, ChevronUpFill, ChevronDownFill } from '../icons';
 
   export type SortDirection = 'asc' | 'desc' | undefined;
 
@@ -89,19 +90,19 @@
     </span>
     <span class="garden-sortable-btn__icons" aria-hidden="true">
       <!-- Stroke icon (shown when no sort) -->
-      <svg class="garden-sortable-btn__stroke-icon" viewBox="0 0 12 12" width="12" height="12">
-        <path fill="currentColor" d="M6 2.5l2.5 3h-5zm0 7l2.5-3h-5z" opacity="0.4"/>
-      </svg>
+      <span class="garden-sortable-btn__stroke-icon">
+        <SortStroke size={12} />
+      </span>
       <!-- Fill icon (shown when sorted) -->
-      <svg class="garden-sortable-btn__fill-icon" viewBox="0 0 12 12" width="12" height="12">
+      <span class="garden-sortable-btn__fill-icon">
         {#if sort === 'asc'}
-          <path fill="currentColor" d="M6 2.5l2.5 3h-5z"/>
+          <ChevronUpFill size={12} />
         {:else if sort === 'desc'}
-          <path fill="currentColor" d="M6 9.5l2.5-3h-5z"/>
+          <ChevronDownFill size={12} />
         {:else}
-          <path fill="currentColor" d="M6 2.5l2.5 3h-5zm0 7l2.5-3h-5z"/>
+          <SortStroke size={12} />
         {/if}
-      </svg>
+      </span>
     </span>
   </button>
 </th>

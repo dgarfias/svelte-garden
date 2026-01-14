@@ -20,6 +20,7 @@
 <script lang="ts">
   import type { ToastContainerProps, ToastItem } from './types';
   import { toastStore } from './toastStore';
+  import { XStroke } from '../icons';
 
   let {
     placement = 'bottom-end',
@@ -95,9 +96,7 @@
             aria-label="Dismiss"
             onclick={() => handleDismiss(toast.id)}
           >
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <path fill="currentColor" d="M12.354 4.354a.5.5 0 00-.708-.708L8 7.293 4.354 3.646a.5.5 0 10-.708.708L7.293 8l-3.647 3.646a.5.5 0 00.708.708L8 8.707l3.646 3.647a.5.5 0 00.708-.708L8.707 8l3.647-3.646z"/>
-            </svg>
+            <XStroke size={14} />
           </button>
         {/if}
       </div>

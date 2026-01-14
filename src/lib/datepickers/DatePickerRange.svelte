@@ -18,6 +18,7 @@
   import type { DatePickerRangeProps, WeekStartsOn } from './types';
   import type { Snippet } from 'svelte';
   import { formatDate as defaultFormatDate, parseDate as defaultParseDate, getLocaleWeekStartsOn, isSameDay, isBefore, isAfter, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addMonths, eachDayOfInterval, isToday, isSameMonth, getWeekdayNames, formatMonthYear } from './utils';
+  import { ChevronLeftStroke, ChevronRightStroke } from '$lib/icons';
 
   interface Props extends DatePickerRangeProps {
     children?: Snippet;
@@ -282,9 +283,7 @@
     </div>
     
     <span class="garden-date-picker-range__separator" aria-hidden="true">
-      <svg viewBox="0 0 16 16" fill="currentColor">
-        <path d="M10.5 8L6 4v8l4.5-4z"/>
-      </svg>
+      <ChevronRightStroke size={16} />
     </span>
     
     <!-- End input -->
@@ -325,9 +324,7 @@
             aria-label="Previous month"
             onclick={goToPreviousMonth}
           >
-            <svg viewBox="0 0 16 16" fill="currentColor">
-              <path d="M10.5 13.5L5 8l5.5-5.5L12 4l-4 4 4 4-1.5 1.5z"/>
-            </svg>
+            <ChevronLeftStroke size={16} />
           </button>
           
           <span class="garden-calendar__title">{monthTitle}</span>
@@ -338,9 +335,7 @@
             aria-label="Next month"
             onclick={goToNextMonth}
           >
-            <svg viewBox="0 0 16 16" fill="currentColor">
-              <path d="M5.5 2.5L11 8l-5.5 5.5L4 12l4-4-4-4 1.5-1.5z"/>
-            </svg>
+            <ChevronRightStroke size={16} />
           </button>
         </div>
         

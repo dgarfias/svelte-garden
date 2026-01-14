@@ -6,6 +6,7 @@
 <script lang="ts">
   import type { OffsetPaginationProps, PaginationLabels } from './types';
   import { useRtl } from '../theming';
+  import { ChevronLeftStroke, ChevronRightStroke } from '../icons';
 
   interface Props extends OffsetPaginationProps {}
 
@@ -132,9 +133,7 @@
         disabled={isFirstPage}
         onclick={handlePrevious}
       >
-        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-          <path d="M10.5 13.5L5 8l5.5-5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <ChevronLeftStroke />
       </button>
     </li>
 
@@ -170,9 +169,7 @@
         disabled={isLastPage}
         onclick={handleNext}
       >
-        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-          <path d="M5.5 2.5L11 8l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <ChevronRightStroke />
       </button>
     </li>
   </ul>

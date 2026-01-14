@@ -15,10 +15,19 @@
   </File>
 -->
 <script lang="ts">
-  import type { Snippet } from 'svelte';
+  import type { Snippet, Component } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
   import type { ValidationState } from './types';
   import { useRtl } from '../theming';
+  import {
+    FileGenericFill,
+    FileDocumentFill,
+    FileSpreadsheetFill,
+    FilePresentationFill,
+    FileImageFill,
+    FileZipFill,
+    FilePdfFill
+  } from '$lib/icons';
 
   type FileType = 'generic' | 'document' | 'spreadsheet' | 'presentation' | 'image' | 'video' | 'zip' | 'pdf';
 
@@ -61,17 +70,20 @@
     className
   ].filter(Boolean).join(' '));
 
-  // File type icons (simplified SVGs)
-  const icons: Record<FileType, string> = {
-    generic: '<path fill="currentColor" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 1v3h3l-3-3z"/>',
-    document: '<path fill="currentColor" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 1v3h3l-3-3zM5 10h6v1H5v-1zm0 2h6v1H5v-1z"/>',
-    spreadsheet: '<path fill="currentColor" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 1v3h3l-3-3zM4 9h3v2H4V9zm4 0h4v2H8V9zM4 12h3v2H4v-2zm4 0h4v2H8v-2z"/>',
-    presentation: '<path fill="currentColor" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 1v3h3l-3-3zM5 10l2 3 2-2 3 3H4l1-4z"/>',
-    image: '<path fill="currentColor" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 1v3h3l-3-3zM6 9a1 1 0 100 2 1 1 0 000-2zm-2 6l2-3 2 2 3-4 3 5H4z"/>',
-    video: '<path fill="currentColor" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 1v3h3l-3-3zM6 10v4l4-2-4-2z"/>',
-    zip: '<path fill="currentColor" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 1v3h3l-3-3zM7 8h2v1H7V8zm0 2h2v1H7v-1zm0 2h2v3H7v-3z"/>',
-    pdf: '<path fill="currentColor" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6l-4-4H4zm5 1v3h3l-3-3zM5 10h1c.6 0 1 .4 1 1s-.4 1-1 1H5v2H4v-4h1zm4 0h1c.6 0 1 .4 1 1v2c0 .6-.4 1-1 1H9v-4zm-2 0h1v1h1v1H7v1h1v1H6v-4z"/>'
+  // Map file types to icon components (video falls back to generic since no video icon exists)
+  const iconMap: Record<FileType, Component<{ size?: number; class?: string }>> = {
+    generic: FileGenericFill,
+    document: FileDocumentFill,
+    spreadsheet: FileSpreadsheetFill,
+    presentation: FilePresentationFill,
+    image: FileImageFill,
+    video: FileGenericFill, // No video icon in library, use generic
+    zip: FileZipFill,
+    pdf: FilePdfFill
   };
+
+  const IconComponent = $derived(iconMap[type]);
+  const iconSize = $derived(isCompact ? 12 : 16);
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
@@ -81,9 +93,9 @@
   tabindex="0"
   {...restProps}
 >
-  <svg class="garden-file__icon" viewBox="0 0 16 20" aria-hidden="true">
-    {@html icons[type]}
-  </svg>
+  <span class="garden-file__icon" aria-hidden="true">
+    <IconComponent size={iconSize} />
+  </span>
   
   <span class="garden-file__name">
     {#if children}
@@ -140,9 +152,15 @@
 
   .garden-file__icon {
     flex-shrink: 0;
-    width: 16px;
-    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--garden-color-foreground-subtle, #68737d);
+  }
+
+  .garden-file__icon :global(svg) {
+    width: 16px;
+    height: 16px;
   }
 
   .garden-file__name {
@@ -170,9 +188,9 @@
     font-size: 12px;
   }
 
-  .garden-file--compact .garden-file__icon {
+  .garden-file--compact .garden-file__icon :global(svg) {
     width: 12px;
-    height: 16px;
+    height: 12px;
   }
 
   /* ===========================================
